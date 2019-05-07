@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densitydpi=device-dpi">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>数据图</title>
+    <link rel="stylesheet" href="./layui/css/layui.css">
+    <style>
+        .btn-group {
+            margin: 0 0 30px 0;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .btn-group a {
+            display: block;
+            font-size: 14px;
+            color: #fff;
+            background-color: #0084ff;
+            border-radius: 4px;
+            padding: 10px;
+            text-decoration: none;
+        }
+
+        .flex-select {
+            margin: 50px 0 0 0;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .flex-select .layui-form-label {
+            width: auto;
+        }
+
+        .flex-select .layui-form-item {
+            display: flex;
+        }
+
+        .flex-select .layui-input-block {
+            margin-left: 0;
+        }
+
+        .flex-select .layui-btn {
+            margin-left: 20px;
+            margin-right: 10px;
+        }
+        .xstxt, .mltxt {
+            text-align: center
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layui-form flex-select" lay-filter="date">
+        <div class="layui-form-item">
+            <label class="layui-form-label">年</label>
+            <div class="layui-input-block">
+                <select name="year" lay-filter="year">
+                    <option value="2019">2019</option>
+                    <option value="2018">2018</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">月</label>
+            <div class="layui-input-block">
+                <select name="month" lay-filter="month">
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                </select>
+            </div>
+        </div>
+        <button class="layui-btn layui-btn-normal" id="search">查询</button>
+    </div>
+    <div class="btn-group">
+        <a href="javascript:void(0);" class="first-btn">查看运营一部详情</a>
+        <a href="javascript:void(0);" class="second-btn">查看运营二部详情</a>
+    </div>
+
+    <div id="chart-xs" style="width: 100%; height: 400px;"></div>
+    <p class="xstxt">销售额<span class="xsRatio"></span></p>
+    <div id="chart-xsc" style="width: 100%; height: 400px;"></div>
+    <div id="chart-ml" style="width: 100%; height: 400px;"></div>
+    <p class="mltxt">毛利额<span class="mlRatio"></span></p>
+    <div id="chart-mlc" style="width: 100%; height: 400px;"></div>
+
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+    <script src="./layui/layui.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+    <script src="./getdata.js"></script>
+    <script>
+        $(function () {
+            layui.use(['layer', 'form'], function () {
+                var layer = layui.layer;
+                var form = layui.form;
+                
+                var now = new Date();
+                var initYear = now.getFullYear();
+                var initMonth = now.getMonth();
+                if (initMonth + 1 < 10) {
+                    initMonth = '0' + (initMonth + 1);
+                }
+
+                if (window.location.search.substring(1)){
+                    initYear = getQueryVariable('year');
+                    initMonth = getQueryVariable('month');
+                }
+
+                form.val('date', {
+                    'year': initYear,
+                    'month': initMonth
+                });
+
+                var year = $('select[name=year]').val();
+                var month = $('select[name=month]').val();
+
+                function skipTo(year, month) {
+                    $(".first-btn").on('click', function () {
+                        window.location.href = './operations.html?yyid=1&year=' + year +
+                            '&month=' + month;
+                    });
+
+                    $(".second-btn").on('click', function () {
+                        window.location.href = './operations.html?yyid=2&year=' + year +
+                            '&month=' + month;
+                    });
+                }
+                skipTo(year, month);
+
+                form.on('select(year)', function (data) {
+                    year = $('select[name=year]').val();
+                    month = $('select[name=month]').val();
+                    skipTo(year, month);
+                });
+
+                form.on('select(month)', function (data) {
+                    year = $('select[name=year]').val();
+                    month = $('select[name=month]').val();
+                    skipTo(year, month);
+                });
+
+                function renderChart() {
+                    layer.msg('数据加载中', {
+                        icon: 16,
+                        shade: 0.01
+                    });
+                    var options1 = {
+                        url: 'http://122.225.202.22:51370/CockpitHandler.ashx?t=zxs&month=' + year +
+                            month,
+                        histogramId: 'chart-xs', //柱状图id
+                        dashBoardId: 'chart-xsc', //仪表盘id
+                        title: '销售任务及完成率', //顶部标题
+                        tbtl: '同比销售额', //图例
+                        zetl: '当前销售额', //图例
+                        hbtl: '环比销售额',
+                        date: year + '年' + month + '月', //日期
+                        tag: 'xs'
+                    }
+
+                    getData(options1)
+
+                    var options2 = {
+                        url: 'http://122.225.202.22:51370/CockpitHandler.ashx?t=zml&month=' + year +
+                            month,
+                        histogramId: 'chart-ml', //柱状图id
+                        dashBoardId: 'chart-mlc', //仪表盘id
+                        title: '毛利任务及完成率', //顶部标题
+                        tbtl: '同比总毛利', //图例
+                        zetl: '当前总毛利', //图例
+                        hbtl: '环比总毛利',
+                        date: year + '年' + month + '月', //日期
+                        tag: 'ml'
+                    }
+
+                    getData(options2, function () {
+                        layer.closeAll('loading');
+                    })
+                }
+                renderChart();
+
+                $("#search").on('click', function () {
+                    renderChart();
+                });
+            });
+        })
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>门店详情</title>
+    <link rel="stylesheet" href="./layui/css/layui.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .tab-title {
+            width: 100%;
+        }
+
+        .tab-title-item {
+            width: 50%;
+        }
+
+        .layui-tab-content {
+            padding: 0;
+        }
+
+        .layui-tab-item {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        .table-xs,
+        .table-ml {
+            width: 100%;
+        }
+
+        .table-xs th,
+        .table-ml th {
+            font-weight: bold;
+            white-space: nowrap;
+            /* text-align: center; */
+            /* width: 25%; */
+        }
+
+        tbody tr:nth-of-type(even) {
+            background-color: #f2f2f2;
+        }
+
+        tbody tr:nth-of-type(-2n+9) {
+            background-color: #f7bdbe;
+            color: #43494c;
+        }
+
+        tbody tr:nth-of-type(-2n+10) {
+            background-color: #ffe7d7;
+            color: #43494c;
+        }
+
+        .layui-table td{
+            padding: 9px 5px;
+            font-size: 13px;
+        }
+
+        .layui-table th {
+            padding: 9px 5px;
+            font-size: 12px;
+        }
+
+        .btn {
+            margin: 5px 0 0 10px;
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .btn a {
+            display: block;
+            font-size: 14px;
+            color: #fff;
+            background-color: #0084ff;
+            border-radius: 4px;
+            padding: 10px 15px;
+            text-decoration: none;
+        }
+        .layui-table .text-right {
+            text-align: right;
+            padding-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="btn">
+        <a class="goback" href="javascript:void(0);">返回</a>
+    </div>
+    <div class="layui-tab layui-tab-card">
+        <ul class="layui-tab-title tab-title">
+            <li class="layui-this tab-title-item">销售任务</li>
+            <li class="tab-title-item">毛利任务</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <table class="layui-table table-xs" lay-skin="nob">
+                    <thead>
+                        <tr>
+                            <th>排名</th>
+                            <th>门店名称</th>
+                            <th>销售任务(万元)</th>
+                            <th>销售额(万元)</th>
+                            <th>完成率</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="layui-tab-item">
+                <table class="layui-table table-ml" lay-skin="nob">
+                    <thead>
+                        <tr>
+                            <th>排名</th>
+                            <th>门店名称</th>
+                            <th>毛利任务(万元)</th>
+                            <th>毛利额(万元)</th>
+                            <th>完成率</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+    <script src="./layui/layui.js"></script>
+    <script>
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split("&");
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split("=");
+                if (pair[0] == variable) {
+                    return pair[1];
+                }
+            }
+            return (false);
+        }
+        $(function () {
+            $(".goback").on('click', function () {
+                window.history.back();
+            });
+
+            layui.use(['element', 'layer'], function () {
+                var layer = layui.layer;
+                var element = layui.element;
+
+                var yyid = getQueryVariable('yyid');
+                var year = getQueryVariable('year');
+                var month = getQueryVariable('month');
+
+                layer.msg('数据加载中', {
+                    icon: 16,
+                    shade: 0.01
+                });
+
+                $.ajax({
+                    url: "http://122.225.202.22:51370/CockpitHandler.ashx?t=mdxs&month=" + year +
+                        month + "&yyid=" + yyid,
+                    type: 'get',
+                    dataType: 'json',
+                    success: function (res) {
+
+                        res.sort(function(a, b) {
+                            return b.xse / b.rew - a.xse / a.rew;
+                        });
+
+                        var xsHtml = '';
+                        for (var i = 0; i < res.length; i++) {
+
+                            xsHtml += '<tr>' +
+                                '<td class="text-right">' + (i+1) + '</td>' +
+                                '<td>' + res[i].shopname + '</td>' +
+                                '<td>' + (res[i].rew / 10000).toFixed(2) + '</td>' +
+                                '<td>' + (res[i].xse /10000).toFixed(2) + '</td>' +
+                                '<td>' + Math.round(res[i].xse / res[i].rew * 100) + '%' +
+                                '</td>' +
+                                '</tr>';
+                        }
+                        $('.table-xs tbody').append(xsHtml);
+                    }
+                });
+
+                $.ajax({
+                    url: "http://122.225.202.22:51370/CockpitHandler.ashx?t=mdml&month=" + year +
+                        month + "&yyid=" + yyid,
+                    type: 'get',
+                    dataType: 'json',
+                    success: function (res) {
+                        res.sort(function(a, b) {
+                            return b.mle / b.mlrw - a.mle / a.mlrw;
+                        });
+
+                        var xsHtml = '';
+                        for (var i = 0; i < res.length; i++) {
+
+                            xsHtml += '<tr>' +
+                                '<td class="text-right">' + (i+1) + '</td>' +
+                                '<td>' + res[i].shopname + '</td>' +
+                                '<td>' + (res[i].mlrw / 10000).toFixed(2) + '</td>' +
+                                '<td>' + (res[i].mle /10000).toFixed(2) + '</td>' +
+                                '<td>' + Math.round(res[i].mle / res[i].mlrw * 100) + '%' +
+                                '</td>' +
+                                '</tr>';
+                        }
+                        $('.table-ml tbody').append(xsHtml);
+                        layer.closeAll('loading');
+                    }
+                })
+            });
+        })
+    </script>
+
+</body>
+
+</html>
