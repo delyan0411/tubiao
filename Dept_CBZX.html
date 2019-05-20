@@ -11,22 +11,89 @@
 	<script type="text/javascript" src="ztree/js/jquery-1.4.4.min.js"></script>
   <script type="text/javascript" src="ztree/js/jquery.ztree.core.js"></script>
   <script type="text/javascript" src="ztree/js/jquery.ztree.excheck.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    .box {
+      margin: 10px;
+      width: 300px;
+      height: 500px;
+      border: 1px solid #aaa;
+      float: left;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+    .result {
+      margin: 10px 0;
+      width: 300px;
+      height: 500px;
+      border: 1px solid #aaa;
+      float: left;
+      text-align: center;
+      
+    }
+    .result-title {
+      font-size: 20px;
+      color: #008474;
+      text-align: center;
+    }
+    .eleTree {
+      position: relative;
+      height: 100%;
+    }
+    .tjan {
+      position: absolute;
+      bottom: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70%;
+      height: 36px;
+      line-height: 36px;
+    }
+
+    .tjan input {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background-color: #008474;
+      border: 0;
+      outline: 0;
+      font-size: 16px;
+      color: #fff;
+    }
+    .result-list {
+      margin-top: 10px;
+      height: 400px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      padding: 10px;
+    }
+  </style>
 </head>
 
 
 <body>
 
-  <ul id="dept" class="ztree"  style="float: left;"></ul>
-  <div class="eleTree layui-form" style="float: left;">
-    <h3 style="line-height: 50px;text-align:center;color: #ff4200" id="bmname">选择部门设置成本中心</h3>
-    <input type="hidden" value="" id="bmvalue" />
-    <ul id="cbzxxz"  style="display:none;" class="ztree">
-  </ul>
-  <div class="tjan">
-    <input onclick="tijiao()" type="button" value="提交"/></div>
+  <div class="box">
+    <ul id="dept" class="ztree"></ul>
+  </div>
+
+  <div class="result">
+    <div class="eleTree layui-form">
+      <h2 class="result-title" id="bmname">选择部门设置成本中心</h2>
+      <input type="hidden" value="" id="bmvalue" />
+      <!-- <ul id="cbzxxz"  style="display:none;" class="ztree">
+      </ul> -->
+      <div class="result-list"></div>
+      <div class="tjan">
+        <input onclick="tijiao()" type="button" value="提交"/></div>
+      </div>
   </div>
   
-  <ul id="cbzx" class="ztree" style="float: left;" ></ul>
+  <div class="box">
+    <ul id="cbzx" class="ztree"></ul>
+  </div>
   <!-- <ul id="cbzx2" class="eleTree" lay-filter="data14"></ul> -->
   <!-- <script src="./jquery-2.2.4.js" >
     </script> -->
