@@ -1,4 +1,5 @@
-<?
+
+ <?
 include_once "inc/auth.inc.php";
 include_once "inc/utility_all.php";
 
@@ -6,6 +7,11 @@ include_once "inc/utility_all.php";
 $cursor = exequery(TD::conn(), $query);
 if($ROW=mysql_fetch_row($cursor))
 $SAP_DEPT_ID=$ROW[0];
+
+$query2 = "SELECT BYNAME FROM `user` WHERE `user_id`='".$_SESSION["LOGIN_USER_ID"]."'";
+$cursor2 = exequery(TD::conn(), $query2);
+if($ROW2=mysql_fetch_row($cursor2))
+$SAP_ID=$ROW2[0];
 
 // echo $SAP_DEPT_ID;
  ?>
@@ -52,6 +58,8 @@ $SAP_DEPT_ID=$ROW[0];
                         autocomplete="off" class="layui-input" value="1000">
                 </div>
             </div> -->
+            
+  <ul id="dept" class="ztree"  style="float: left;"></ul>
             <div class="layui-form-item">
                 <label class="layui-form-label">成本中心</label>
                 <div class="cbzxlist" style="display:inline;"></div>
@@ -125,43 +133,80 @@ $SAP_DEPT_ID=$ROW[0];
     </div>
 
     <script src="./layui/layui.all.js"></script>
-    <script src="http://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
-        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+	<script type="text/javascript" src="jquery-2.2.4.js"></script>
+  <script type="text/javascript" src="ztree/js/jquery.ztree.core.js"></script>
+  <script type="text/javascript" src="ztree/js/jquery.ztree.excheck.js"></script>
     <script>
+          var testurl="http://localhost:22674/";
+    var zsurl="http://192.168.1.88:8086/";
+    var url=zsurl;
+   
+  
+		var settingcbzx = {
+			data: {
+				simpleData: {
+					enable: true
+				}
+      },
+      check:{
+        enable: true,
+		chkStyle: "checkbox",
+		chkboxType: { "Y": "ps", "N": "ps" }
+      }
+      // check: {
+			// 	enable: true
+			// }
+      
+		};
+
+
+    
+		$(document).ready(function(){
+     
+      $.ajax({
+        url: url+"Dept_Cbzx.ashx?t=GetUserCbzx&uid=<?echo $SAP_ID ?> &deptid=<?echo $SAP_DEPT_ID ?> ",
+        type: 'post',
+        success: function (data) {
+          var zNodes=data;
+      $.fn.zTree.init($("#dept"), settingcbzx, zNodes);
+        }
+    })
+});
         layui.use(['table'], function () {
             table = layui.table
             //search(layui.table);
 
 
-            $.ajax({
-                url: "http://192.168.1.88:8086/Dept_Cbzx.ashx?t=GETCbzxDeptList",
-                type: 'post',
-                data: { sap_dept_id: <?echo $SAP_DEPT_ID ?> },
-                success: function (data) {
-                    //$(".cbzxlist").html("");
-                    if (data.code == 0) {
-                        if (data.CBZX_ID_STR) {
-                            var str = data.CBZX_ID_STR;
-                            var arr = str.split(",");
-                            var checkhtml = "";
-                            var arrids = [];
-                            $.each(arr, function (index, data) {
-                                var arr2 = data.split("|");
-                                //ulhtml+="<li class=\"inp\">"+arr2[0]+"</li>";             
-                                checkhtml += "<input type=\"checkbox\" name=\"cbzx\" title=\"" + arr2[0] + "\" lay-skin=\"primary\" value=\"" + arr2[1] + "\" />";
-                                //console.log(checkhtml);    
-                            });
-                            $(".cbzxlist").html(checkhtml);
-                            //最后重新加载一下就可以了
-                            layui.use('form', function () {
-                                var form = layui.form;
-                                //根据的type类型修改
-                                form.render('checkbox');
-                            });
-                        }
-                    }
-                }
-            })
+            // $.ajax({
+            //     url: "http://192.168.1.88:8086/Dept_Cbzx.ashx?t=GETCbzxDeptList",
+            //     type: 'post',
+            //     data: { sap_dept_id: <?echo $SAP_DEPT_ID ?> },
+            //     success: function (data) {
+            //         //$(".cbzxlist").html("");
+            //         if (data.code == 0) {
+            //             if (data.CBZX_ID_STR) {
+            //                 var str = data.CBZX_ID_STR;
+            //                 var arr = str.split(",");
+            //                 var checkhtml = "";
+            //                 var arrids = [];
+            //                 $.each(arr, function (index, data) {
+            //                     var arr2 = data.split("|");
+            //                     //ulhtml+="<li class=\"inp\">"+arr2[0]+"</li>";             
+            //                     checkhtml += "<input type=\"checkbox\" name=\"cbzx\" title=\"" + arr2[0] + "\" lay-skin=\"primary\" value=\"" + arr2[1] + "\" />";
+            //                     //console.log(checkhtml);    
+            //                 });
+            //                 $(".cbzxlist").html(checkhtml);
+            //                 //最后重新加载一下就可以了
+            //                 layui.use('form', function () {
+            //                     var form = layui.form;
+            //                     //根据的type类型修改
+            //                     form.render('checkbox');
+            //                 });
+            //             }
+            //         }
+            //     }
+            // })
 
             $(".search-btn").on("click", function () {
                 search(layui.table);
@@ -174,13 +219,27 @@ $SAP_DEPT_ID=$ROW[0];
             var qj = "EQ"; //区间
             //所有的checkbox选中项
             var qjz = '';
-            $('input:checkbox[name=cbzx]:checked').each(function (k) {
-                if (k == 0) {
-                    qjz = $(this).val();
+            var data=[];
+  var cbzx=$.fn.zTree.getZTreeObj("dept"),
+            nodes=cbzx.getCheckedNodes(true),
+            v="";
+            for(var i=0;i<nodes.length;i++){
+              var item={};
+            v+=nodes[i].name + ",";
+            //console.log(nodes[i].id); //获取选中节点的值
+            console.log("节点id:"+nodes[i].id+";;;节点名称"+nodes[i].name+";;;;父节点:"+nodes[i].pid+";;;;shibushifu节点:"+nodes[i].isParent+"");
+            // item.id=nodes[i].id;
+            // item.name=nodes[i].name;
+            // item.pid=nodes[i].pid;
+            // item.isParent=nodes[i].isParent==true?1:0;
+            // data.push(item);
+            //console.log("节点id:"+nodes[i].id+"节点名称"+v);
+                 if (i == 0) {
+                    qjz = nodes[i].id;
                 } else {
-                    qjz += ',' + $(this).val();
+                    qjz += ',' + nodes[i].id;
                 }
-            })
+            }
             console.log(qjz);
             var ks = qjz; //开始
             //var js = $("#js").val(); //结束

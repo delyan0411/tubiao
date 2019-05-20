@@ -7,256 +7,173 @@
   <title>部门成本中心关联</title>
   <link rel="stylesheet" href="./layui/css/layui.css">
   <link rel="stylesheet" href="./layui/css/modules/eleTree/eleTree.css">
+  <link rel="stylesheet" href="ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+	<script type="text/javascript" src="ztree/js/jquery-1.4.4.min.js"></script>
+  <script type="text/javascript" src="ztree/js/jquery.ztree.core.js"></script>
+  <script type="text/javascript" src="ztree/js/jquery.ztree.excheck.js"></script>
 </head>
-<style>
-  .eleTree {
-    width: 350px;
-    height: 500px;
-    border: 1px solid #ccc;
-    overflow: auto;
-    display: inline-block;
-  }
-  .inp{
-    width: 100%;
-    line-height: 30px;
-    text-align: center;
-  }
-  #cbzxxz
-  {
-    overflow: auto;
-    height: 80%;
-  }
-  .tjan
-  {    
-    position: absolute;
-    bottom: 0px;
-    text-align: center;
-    /* margin: 0 auto; */
-    width: 100%;
-  }
-</style>
+
 
 <body>
 
-  <ul id="demo" class="eleTree" lay-filter="data3"></ul>
-  <div class="eleTree layui-form">
+  <ul id="dept" class="ztree"  style="float: left;"></ul>
+  <div class="eleTree layui-form" style="float: left;">
     <h3 style="line-height: 50px;text-align:center;color: #ff4200" id="bmname">选择部门设置成本中心</h3>
     <input type="hidden" value="" id="bmvalue" />
-    <ul id="cbzxxz">
+    <ul id="cbzxxz"  style="display:none;" class="ztree">
   </ul>
   <div class="tjan">
     <input onclick="tijiao()" type="button" value="提交"/></div>
   </div>
-  <!-- <input onclick="test()" type="button" value="测试"/> -->
-  <!-- <div class="layui-container">
-
-<div class="layui-row">
-    <div class="layui-col-md4">
-      <div class="grid-demo grid-demo-bg1"><ul id="demo" lay-filter="data3"></ul></div>
-    </div>
-    <div class="layui-col-md4">
-      <div class="grid-demo"><table class="layui-table">
-    <colgroup>
-      <col width="150">
-      <col>
-    </colgroup>
-    <thead>
-      <tr>
-        <th>人物</th>
-        <th>格言</th>
-      </tr> 
-    </thead>
-    <tbody>
-      <tr>
-        <td>贤心</td>
-        <td>人生似修行</td>
-      </tr>
-      <tr>
-        <td>张爱玲</td>
-        <td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>
-      </tr>
-      <tr>
-        <td>Helen Keller</td>
-        <td> Life is either a daring adventure or nothing.</td>
-      </tr>
-      <tr>
-        <td>岳飞</td>
-        <td>教科书再滥改，也抹不去“民族英雄”的事实</td>
-      </tr>
-      <tr>
-        <td>孟子</td>
-        <td>猿强，则国强。国强，则猿更强！ </td>
-      </tr>
-    </tbody>
-  </table></div>
-    </div>
-    <div class="layui-col-md4">
-      <div class="grid-demo grid-demo-bg1"><ul id="cbzx"></ul></div>
-    </div>
-  </div>
-	</div>-->
-  <!--<ul id="cbzx"></ul>-->
-  <!-- <div id="kuang"  style="display: none;">  </div> -->
-  <ul id="cbzx" class="eleTree" lay-filter="data4"></ul>
-  <script src=" ./layui/layui.all.js"> </script>
-  <script src="http://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
-    crossorigin="anonymous">
-    </script>
+  
+  <ul id="cbzx" class="ztree" style="float: left;" ></ul>
+  <!-- <ul id="cbzx2" class="eleTree" lay-filter="data14"></ul> -->
+  <!-- <script src="./jquery-2.2.4.js" >
+    </script> -->
   <script>
-    var el;
-    layui.config({
-      base: "layui/lay/modules/"        //eleTree.js所在目录
-    }).use(['jquery', 'eleTree'], function () {
-      var $ = layui.jquery;
-      var eleTree = layui.eleTree;
+    var testurl="http://localhost:22674/";
+    var zsurl="http://192.168.1.88:8086/";
+    var url=zsurl;
+   
+    var settingdept = {
+			data: {
+				simpleData: {
+					enable: true
+				}
+      },
+      callback: {
+				onClick: ondeptClick
+			}
+		};
+		var settingcbzx = {
+			data: {
+				simpleData: {
+					enable: true
+				}
+      },
+      check:{
+        enable: true,
+		chkStyle: "checkbox",
+		chkboxType: { "Y": "ps", "N": "ps" }
+      }
+      // check: {
+			// 	enable: true
+			// }
+      
+		};
+
+
+    
+		$(document).ready(function(){
+     
       $.ajax({
-        url: "http://192.168.1.88:8086/Dept_Cbzx.ashx?t=GETDeptList",
+        url: url+"Dept_Cbzx.ashx?t=GETDeptList",
         type: 'post',
         success: function (data) {
-          //数据一定要在 渲染render前  render里的url 和 type 应该是用来ajax获取远程数据的，不过不好用。eleTree.js中要求比较多data.Code 等等，就没用，直接页面取得了。将data ,data1,data3 换成自己的。
-          el = eleTree.render({
-            request: {
-              name: "name",
-              key: "id",
-              children: "children"
-            },
-            elem: '#demo',
-            data: data,
-            //defaultExpandAll:true,
-            highlightCurrent: true,
-            //showCheckbox: true,
-            //defaultCheckedKeys: [490, 478, 477]
-          });
-          eleTree.on("nodeClick(data3)", function (d) {
-            if (!d.data.currentData.children) {
-              console.log(d.data);    // 点击节点对于的数据
-              //console.log(d.data.currentData.name);    // 
-              //console.log(d.data.currentData.sapid);    // 
-              //console.log(d.event);   // event对象
-              //console.log(d.node);    // 点击的dom节点
-              //console.log(this);      // 与d.node相同
-              $("#bmname").text(d.data.currentData.name + "下的成本中心");
-              $("#bmvalue").val(d.data.currentData.sapid);
-              //获取这个部门下的成本中心
+          var zNodes=data;
+      $.fn.zTree.init($("#dept"), settingdept, zNodes);
+        }
+    })
+    $.ajax({
+      url: url+"Dept_Cbzx.ashx?t=GETCbzxList",
+        type: 'post',
+        success: function (data) {
+          var zNodes=data;
+      $.fn.zTree.init($("#cbzx"), settingcbzx, zNodes);
+       
+      //cbzxnodes = cbzxTree.getNodes();
+        }
+    })
+  });
+		function ondeptClick(event, treeId, treeNode, clickFlag){
+              $("#bmname").text(treeNode.name + "可查看的成本中心");
+              $("#bmvalue").val(treeNode.sapid);
               $.ajax({
-        url: "http://192.168.1.88:8086/Dept_Cbzx.ashx?t=GETCbzxDeptList",
+        url: url+"Dept_Cbzx.ashx?t=GETCbzxDeptList",
         type: 'post',
-        data: {sap_dept_id:d.data.currentData.sapid},
+        data: {sap_dept_id:treeNode.sapid},
         success: function (data) {
-          //alert(1231);
           console.log(data);
-          $("#cbzxxz").html("");
-          //el2.unCheckNodes();
-       if(data.CBZX_ID_STR)
+         // $("#cbzxxz").html("");
+          var cbzxTree = $.fn.zTree.getZTreeObj("cbzx"); 
+        cbzxTree.checkAllNodes(false);
+       if(data.data&&data.data.length>0)
        {
-         //alert(123);
-        console.log(data.CBZX_ID_STR);
-         var str =   data.CBZX_ID_STR;
-var arr=str.split(","); 
-//$("#cbzxxz").html("");
-        var ulhtml="";
-        
+        console.log(data.data);
+        // var str =   data.CBZX_ID_STR;
+var arr=data.data; 
+        var ulhtml="";        
         var arrids=[];
+       
         $.each(arr,function(index,data)
           {
-            var arr2=data.split("|"); 
-           
-          //ulhtml+="<li class=\"inp\">"+arr2[0]+"</li>";   
-          ulhtml+="<li class=\"inp\" attr-id=\""+arr2[1]+"\">"+arr2[0]+"</li>";    
-          arrids.push(arr2[1]);   
+            //var arr2=data.split("|");            
+          //ulhtml+="<li class=\"inp\" attr-id=\""+arr2[1]+"\">"+arr2[0]+"</li>";    
+          arrids.push(data.id);   
+          // for(var i = 0;i<cbzxnodes.length;i++)
+          // {
+            if(!data.isParent){
+            var cbzxnodes=cbzxTree.getNodeByParam('id',data.id);
+            // console.log(cbzxnodes.length);
+            // console.log(i);
+            // console.log(arr2[1]);
+            // console.log(cbzxnodes[i].id);
+            console.log(cbzxnodes);
+            //cbzxnodes.checked = true;
+                //调用updateNode(node)接口进行更新
+                //cbzxTree.updateNode(cbzxnodes);
+                cbzxTree.checkNode(cbzxnodes, true, true, false);
+          }
+        
+          //}
           });
-          console.log(arrids);
-          el2.setChecked(arrids,true); 
-          $("#cbzxxz").html(ulhtml);
-       
-       }
+          console.log(arrids);                  
+          //el2.setChecked(arrids,true); 
+          //$("#cbzxxz").html(ulhtml);       
+        }
        else{
-        el2.setChecked([],true); 
+        //el2.setChecked([],true); 
        }
         }
-  })
-            }
-          });
-        },
-        error: function (msg) {
-          console.log(msg)
-        }
-      });
+              })
+    }
+    function oncczxClick(){
 
       
-      
-      $.ajax({
-        url: "http://192.168.1.88:8086/Dept_Cbzx.ashx?t=GETCbzxList",
-        type: 'post',
-        success: function (data) {
-          //数据一定要在 渲染render前  render里的url 和 type 应该是用来ajax获取远程数据的，不过不好用。eleTree.js中要求比较多data.Code 等等，就没用，直接页面取得了。将data ,data1,data3 换成自己的。
-          el2 = eleTree.render({
-            request: {
-              name: "name",
-              key: "id",
-              children: "children"
-            },
-            elem: '#cbzx',
-            data: data,
-            //defaultExpandAll:true,
-            highlightCurrent: true,
-            showCheckbox: true,
-            renderAfterExpand:false
-            //defaultCheckedKeys: [490, 478, 477]
-          });
-          // input被选中事件
-      eleTree.on("nodeChecked(data4)", function (d) {
-        //console.log(d.data);    // 点击节点对于的数据
-        //console.log(d.isChecked);   // input是否被选中
-        //console.log(d.node);    // 点击的dom节点
-        //console.log(this);      // input对于的dom
-        //console.log(el2.getChecked());
-        var chceklist=el2.getChecked(true,false);
-        $("#cbzxxz").html("");
-        var ulhtml="";
-        $.each(chceklist,function(index,data)
-          {
-            console.log(data);
-          console.log("索引:"+index+","+"对应值为："+data.name+","+"ID为："+data.id+"PID未:"+data.pid+"");
-          ulhtml+="<li class=\"inp\" attr-id=\""+data.id+"\">"+data.name+"</li>";         
-          });
-          $("#cbzxxz").html(ulhtml);
-      })
-        },
-        error: function (msg) {
-          console.log(msg)
-        }
-      });
-    });
-
+}
 function tijiao()
 {
-  var arr=[];
-  $("#cbzxxz li").each(function(index){     
-    arr.push($(this).text()+"|"+$(this).attr("attr-id"));
-  })
-console.log(arr);
- var cbzxstr=arr.join();
- console.log(cbzxstr);
- var deptid=$("#bmvalue").val();
- if(deptid=="")
-  {
-    alert("请先选择部门");
-    return false;
-  }
-  if(arr.length==0)
-  {
-    alert("至少选择一个成本中心");
-    return false;
-  }
-  $.ajax({
-        url: "http://192.168.1.88:8086/Dept_Cbzx.ashx?t=UpdateCbzxDeptList",
-        type: 'post',
-        data: {CBZX_ID_STR:cbzxstr,SAP_DEPT_ID:deptid},
-        success: function (data) {
-          alert("更新成功");
-        }
-  })
+  var data=[];
+  var cbzx=$.fn.zTree.getZTreeObj("cbzx"),
+            nodes=cbzx.getCheckedNodes(true),
+            v="";
+            for(var i=0;i<nodes.length;i++){
+              var item={};
+            v+=nodes[i].name + ",";
+            //console.log(nodes[i].id); //获取选中节点的值
+            console.log("节点id:"+nodes[i].id+";;;节点名称"+nodes[i].name+";;;;父节点:"+nodes[i].pid+";;;;shibushifu节点:"+nodes[i].isParent+"");
+            item.id=nodes[i].id;
+            item.name=nodes[i].name;
+            item.pid=nodes[i].pid;
+            item.isParent=nodes[i].isParent==true?1:0;
+            data.push(item);
+            //console.log("节点id:"+nodes[i].id+"节点名称"+v);
+            }
+            var deptid=$("#bmvalue").val();
+            if(deptid=="")
+            {
+              alert("请先选择部门");
+              return false;
+            }
+  console.log(JSON.stringify(data));
+    $.ajax({
+          url: url+"Dept_Cbzx.ashx?t=UpdateCbzxDeptList",
+          type: 'post',
+          data: {DATA:JSON.stringify(data),SAP_DEPT_ID:deptid},
+          success: function (data) {
+            alert("更新成功");
+          }
+    })
 }
   </script>
 </body>

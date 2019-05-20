@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>部门成本中心关联</title>
+  <link rel="stylesheet" href="./layui/css/layui.css">
+  <link rel="stylesheet" href="./layui/css/modules/eleTree/eleTree.css">
+</head>
+<style>
+  .eleTree {
+    width: 350px;
+    height: 500px;
+    border: 1px solid #ccc;
+    overflow: auto;
+    display: inline-block;
+  }
+  .inp{
+    width: 100%;
+    line-height: 30px;
+    text-align: center;
+  }
+  #cbzxxz
+  {
+    overflow: auto;
+    height: 80%;
+  }
+  .tjan
+  {    
+    position: absolute;
+    bottom: 0px;
+    text-align: center;
+    /* margin: 0 auto; */
+    width: 100%;
+  }
+</style>
+
+<body>
+
+  <ul id="demo" class="eleTree" lay-filter="data3"></ul>
+  <div class="eleTree layui-form">
+    <h3 style="line-height: 50px;text-align:center;color: #ff4200" id="bmname">选择部门设置成本中心</h3>
+    <input type="hidden" value="" id="bmvalue" />
+    <ul id="cbzxxz">
+  </ul>
+  <div class="tjan">
+    <input onclick="tijiao()" type="button" value="提交"/></div>
+  </div>
+  
+  <ul id="cbzx" class="eleTree" lay-filter="data4"></ul>
+  <ul id="cbzx2" class="eleTree" lay-filter="data14"></ul>
+  <script src=" ./layui/layui.all.js"> </script>
+  <script src="./jquery-2.2.4.js" >
+    </script>
+  <script>
+    var testurl="http://localhost:22674/";
+    var zsurl="http://192.168.1.88:8086/";
+    var url=testurl;
+   
+    var el;
+    layui.config({
+      base: "layui/lay/modules/"        //eleTree.js所在目录
+    }).use(['jquery', 'eleTree'], function () {
+      var $ = layui.jquery;
+      var eleTree = layui.eleTree;
+      $.ajax({
+        url: url+"Dept_Cbzx.ashx?t=GETDeptList",
+        type: 'post',
+        success: function (data) {
+          //数据一定要在 渲染render前  render里的url 和 type 应该是用来ajax获取远程数据的，不过不好用。eleTree.js中要求比较多data.Code 等等，就没用，直接页面取得了。将data ,data1,data3 换成自己的。
+          el = eleTree.render({
+            request: {
+              name: "name",
+              key: "id",
+              children: "children"
+            },
+            elem: '#demo',
+            data: data,
+            expandOnClickNode:false,
+            //defaultExpandAll:true,
+            //highlightCurrent: true,
+            //showCheckbox: true,
+            //defaultCheckedKeys: [490, 478, 477]
+          });
+          eleTree.on("nodeClick(data3)", function (d) {
+            //if (!d.data.currentData.children) {
+              console.log(d.data);    // 点击节点对于的数据
+              //console.log(d.data.currentData.name);    // 
+              //console.log(d.data.currentData.sapid);    // 
+              //console.log(d.event);   // event对象
+              //console.log(d.node);    // 点击的dom节点
+              //console.log(this);      // 与d.node相同
+              $("#bmname").text(d.data.currentData.name + "可查看的成本中心");
+              $("#bmvalue").val(d.data.currentData.sapid);
+              //获取这个部门下的成本中心
+              $.ajax({
+        url: url+"Dept_Cbzx.ashx?t=GETCbzxDeptList",
+        type: 'post',
+        data: {sap_dept_id:d.data.currentData.sapid},
+        success: function (data) {
+          //alert(1231);
+          console.log(data);
+          $("#cbzxxz").html("");
+          //el2.unCheckNodes();
+       if(data.CBZX_ID_STR)
+       {
+         //alert(123);
+        console.log(data.CBZX_ID_STR);
+         var str =   data.CBZX_ID_STR;
+var arr=str.split(","); 
+//$("#cbzxxz").html("");
+        var ulhtml="";
+        
+        var arrids=[];
+        $.each(arr,function(index,data)
+          {
+            var arr2=data.split("|"); 
+           
+          //ulhtml+="<li class=\"inp\">"+arr2[0]+"</li>";   
+          ulhtml+="<li class=\"inp\" attr-id=\""+arr2[1]+"\">"+arr2[0]+"</li>";    
+          arrids.push(arr2[1]);   
+          });
+          console.log(arrids);
+          el2.setChecked(arrids,true); 
+          $("#cbzxxz").html(ulhtml);
+       
+       }
+       else{
+        el2.setChecked([],true); 
+       }
+        }
+  })
+           // }
+          });
+        },
+        error: function (msg) {
+          console.log(msg)
+        }
+      });
+
+      
+      
+      $.ajax({
+        url: url+"Dept_Cbzx.ashx?t=GETCbzxList",
+        type: 'post',
+        success: function (data) {
+          //数据一定要在 渲染render前  render里的url 和 type 应该是用来ajax获取远程数据的，不过不好用。eleTree.js中要求比较多data.Code 等等，就没用，直接页面取得了。将data ,data1,data3 换成自己的。
+          el2 = eleTree.render({
+            request: {
+              name: "name",
+              key: "id",
+              children: "children",
+              pid:"pid"
+            },
+            elem: '#cbzx',
+            data: data,
+            //defaultExpandAll:true,
+            highlightCurrent: true,
+            showCheckbox: true,
+            renderAfterExpand:false
+            //defaultCheckedKeys: [490, 478, 477]
+          });
+          // input被选中事件
+      eleTree.on("nodeChecked(data4)", function (d) {
+        //console.log(d.data);    // 点击节点对于的数据
+        //console.log(d.isChecked);   // input是否被选中
+        //console.log(d.node);    // 点击的dom节点
+        //console.log(this);      // input对于的dom
+        //console.log(el2.getChecked());
+        var chceklist=el2.getChecked(true,false);
+        $("#cbzxxz").html("");
+        var ulhtml="";
+        $.each(chceklist,function(index,data)
+          {
+            console.log(data);
+          console.log("索引:"+index+","+"对应值为："+data.name+","+"ID为："+data.id+"PID未:"+data.pid+"");
+          ulhtml+="<li class=\"inp\" attr-id=\""+data.id+"\">"+data.name+"</li>";         
+          });
+          $("#cbzxxz").html(ulhtml);
+      })
+        },
+        error: function (msg) {
+          console.log(msg)
+        }
+      });
+
+
+      $.ajax({
+        url: url+"Dept_Cbzx.ashx?t=GETCbzxList",
+        type: 'post',
+        success: function (data) {
+          //数据一定要在 渲染render前  render里的url 和 type 应该是用来ajax获取远程数据的，不过不好用。eleTree.js中要求比较多data.Code 等等，就没用，直接页面取得了。将data ,data1,data3 换成自己的。
+          el3 = eleTree.render({
+            request: {
+              name: "name",
+              key: "id",
+              children: "children"
+            },
+            elem: '#cbzx2',
+            data: data,
+            //defaultExpandAll:true,
+            highlightCurrent: true,
+            showCheckbox: true,
+            renderAfterExpand:false
+            //defaultCheckedKeys: [490, 478, 477]
+          });
+console.log(2);
+var arrids=["1000280000","1000260000","8000150000"];
+      el3.setChecked(arrids,true); 
+        },
+        error: function (msg) {
+          console.log(msg)
+        }
+      });
+
+    });
+
+function tijiao()
+{
+  var arr=[];
+  $("#cbzxxz li").each(function(index){     
+    arr.push($(this).text()+"|"+$(this).attr("attr-id"));
+  })
+console.log(arr);
+ var cbzxstr=arr.join();
+ console.log(cbzxstr);
+ var deptid=$("#bmvalue").val();
+ if(deptid=="")
+  {
+    alert("请先选择部门");
+    return false;
+  }
+  if(arr.length==0)
+  {
+    alert("至少选择一个成本中心");
+    return false;
+  }
+  $.ajax({
+        url: url+"Dept_Cbzx.ashx?t=UpdateCbzxDeptList",
+        type: 'post',
+        data: {CBZX_ID_STR:cbzxstr,SAP_DEPT_ID:deptid},
+        success: function (data) {
+          alert("更新成功");
+        }
+  })
+}
+  </script>
+</body>
+
+</html>
