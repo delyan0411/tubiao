@@ -26,6 +26,8 @@ $SAP_ID=$ROW2[0];
     <style>
         .container {
             padding: 20px 0;
+            width: 1170px;
+            margin-left: 310px;
         }
 
         .select-item {
@@ -45,10 +47,21 @@ $SAP_ID=$ROW2[0];
             overflow: unset;
             text-overflow: unset;
         }
+        .tree-box {
+          position: absolute;
+          top: 40px;
+          left: 50%;
+          margin-left: -890px;
+          width: 300px;
+          height: 500px;
+          overflow: auto;
+          border: 1px solid #aaa;
+        }
     </style>
 </head>
 
 <body>
+
     <div class="layui-container container">
         <div class="layui-form">
             <!-- <div class="layui-form-item">
@@ -58,8 +71,9 @@ $SAP_ID=$ROW2[0];
                         autocomplete="off" class="layui-input" value="1000">
                 </div>
             </div> -->
-            
-  <ul id="dept" class="ztree"  style="float: left;"></ul>
+            <div class="tree-box">
+                <ul id="dept" class="ztree"  style="float: left;"></ul>
+            </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">成本中心</label>
                 <div class="cbzxlist" style="display:inline;"></div>
