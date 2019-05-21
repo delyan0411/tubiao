@@ -65,9 +65,9 @@ $SAP_ID=$ROW2[0];
     <div class="layui-container container">
         <div class="layui-form">
             <!-- <div class="layui-form-item">
-                <label class="layui-form-label">å…¬å¸ä»£ç </label>
+                <label class="layui-form-label">¹«Ë¾´úÂë</label>
                 <div class="layui-input-block">
-                    <input type="text" id="ggdm" name="title" required lay-verify="required" placeholder="è¯·è¾“å…¥æ ‡é¢˜"
+                    <input type="text" id="ggdm" name="title" required lay-verify="required" placeholder="ÇëÊäÈë±êÌâ"
                         autocomplete="off" class="layui-input" value="1000">
                 </div>
             </div> -->
@@ -75,29 +75,29 @@ $SAP_ID=$ROW2[0];
                 <ul id="dept" class="ztree"  style="float: left;"></ul>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">æˆæœ¬ä¸­å¿ƒ</label>
+                <label class="layui-form-label">³É±¾ÖĞĞÄ</label>
                 <div class="cbzxlist" style="display:inline;"></div>
                 <!-- <div class="layui-inline">
                     <select name="city" lay-verify="required" id="qj">
-                        <option value="BT">åŒºé—´</option>
-                        <option value="EQ">å•ä¸ª(å¤šä¸ªä¸è¿ç»­çš„,)</option>
+                        <option value="BT">Çø¼ä</option>
+                        <option value="EQ">µ¥¸ö(¶à¸ö²»Á¬ĞøµÄ,)</option>
                     </select>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">èŒƒå›´</label>
+                    <label class="layui-form-label">·¶Î§</label>
                     <div class="layui-input-inline" style="width: 100px;">
-                        <input type="text" id="ks" value="1000100000" name="price_min" placeholder="è¯·è¾“å…¥id" autocomplete="off" class="layui-input">
+                        <input type="text" id="ks" value="1000100000" name="price_min" placeholder="ÇëÊäÈëid" autocomplete="off" class="layui-input">
                     </div>
                     <div class="layui-form-mid">-</div>
                     <div class="layui-input-inline" style="width: 100px;">
-                        <input type="text" id="js" value="1000299999" name="price_max" placeholder="è¯·è¾“å…¥id" autocomplete="off" class="layui-input">
+                        <input type="text" id="js" value="1000299999" name="price_max" placeholder="ÇëÊäÈëid" autocomplete="off" class="layui-input">
                     </div>
                 </div> -->
             </div>
 
             <div class="layui-form-item select-list">
                 <div class="select-item select-item-first">
-                    <label class="layui-form-label">å¹´</label>
+                    <label class="layui-form-label">Äê</label>
                     <div class="layui-inline">
                         <select name="city" lay-verify="required" id="nian">
                             <option value="2019">2019</option>
@@ -108,7 +108,7 @@ $SAP_ID=$ROW2[0];
                     </div>
                 </div>
                 <div class="select-item">
-                    <label class="layui-form-label">æœˆ</label>
+                    <label class="layui-form-label">ÔÂ</label>
                     <div class="layui-inline">
                         <select name="city" id="yue" lay-verify="required">
                             <option value="01">01</option>
@@ -127,16 +127,16 @@ $SAP_ID=$ROW2[0];
                     </div>
                 </div>
                 <div class="select-item">
-                    <label class="layui-form-label">åŒ…å«æŠ¥åºŸèµ„äº§</label>
+                    <label class="layui-form-label">°üº¬±¨·Ï×Ê²ú</label>
                     <div class="layui-inline">
                         <select name="city" id="bhbfzc" lay-verify="required">
-                            <option value="">å¦</option>
-                            <option value="X">æ˜¯</option>
+                            <option value="">·ñ</option>
+                            <option value="X">ÊÇ</option>
                         </select>
                     </div>
                 </div>
                 <div class="select-item">
-                    <button class="layui-btn search-btn">æŸ¥è¯¢</button>
+                    <button class="layui-btn search-btn">²éÑ¯</button>
                 </div>
             </div>
         </div>
@@ -179,7 +179,7 @@ $SAP_ID=$ROW2[0];
 		$(document).ready(function(){
      
       $.ajax({
-        url: url+"Dept_Cbzx.ashx?t=GetUserCbzx&uid=<?echo $SAP_ID ?> &deptid=<?echo $SAP_DEPT_ID ?> ",
+        url: url+"Dept_Cbzx.ashx?t=GetUserCbzx&uid=<?echo $SAP_ID ?>&deptid=<?echo $SAP_DEPT_ID ?> ",
         type: 'post',
         success: function (data) {
           var zNodes=data;
@@ -211,10 +211,10 @@ $SAP_ID=$ROW2[0];
             //                     //console.log(checkhtml);    
             //                 });
             //                 $(".cbzxlist").html(checkhtml);
-            //                 //æœ€åé‡æ–°åŠ è½½ä¸€ä¸‹å°±å¯ä»¥äº†
+            //                 //×îºóÖØĞÂ¼ÓÔØÒ»ÏÂ¾Í¿ÉÒÔÁË
             //                 layui.use('form', function () {
             //                     var form = layui.form;
-            //                     //æ ¹æ®çš„typeç±»å‹ä¿®æ”¹
+            //                     //¸ù¾İµÄtypeÀàĞÍĞŞ¸Ä
             //                     form.render('checkbox');
             //                 });
             //             }
@@ -227,11 +227,11 @@ $SAP_ID=$ROW2[0];
             })
         })
         function search(table) {
-            //var ggdm = $("#ggdm").val(); //å…¬å¸ä»£ç 
-            var ggdm = "1000"; //å…¬å¸ä»£ç 
-            //var qj = $("#qj option:selected").val(); //åŒºé—´
-            var qj = "EQ"; //åŒºé—´
-            //æ‰€æœ‰çš„checkboxé€‰ä¸­é¡¹
+            //var ggdm = $("#ggdm").val(); //¹«Ë¾´úÂë
+            var ggdm = "1000"; //¹«Ë¾´úÂë
+            //var qj = $("#qj option:selected").val(); //Çø¼ä
+            var qj = "EQ"; //Çø¼ä
+            //ËùÓĞµÄcheckboxÑ¡ÖĞÏî
             var qjz = '';
             var data=[];
   var cbzx=$.fn.zTree.getZTreeObj("dept"),
@@ -240,14 +240,14 @@ $SAP_ID=$ROW2[0];
             for(var i=0;i<nodes.length;i++){
               var item={};
             v+=nodes[i].name + ",";
-            //console.log(nodes[i].id); //è·å–é€‰ä¸­èŠ‚ç‚¹çš„å€¼
-            console.log("èŠ‚ç‚¹id:"+nodes[i].id+";;;èŠ‚ç‚¹åç§°"+nodes[i].name+";;;;çˆ¶èŠ‚ç‚¹:"+nodes[i].pid+";;;;shibushifuèŠ‚ç‚¹:"+nodes[i].isParent+"");
+            //console.log(nodes[i].id); //»ñÈ¡Ñ¡ÖĞ½ÚµãµÄÖµ
+            console.log("½Úµãid:"+nodes[i].id+";;;½ÚµãÃû³Æ"+nodes[i].name+";;;;¸¸½Úµã:"+nodes[i].pid+";;;;shibushifu½Úµã:"+nodes[i].isParent+"");
             // item.id=nodes[i].id;
             // item.name=nodes[i].name;
             // item.pid=nodes[i].pid;
             // item.isParent=nodes[i].isParent==true?1:0;
             // data.push(item);
-            //console.log("èŠ‚ç‚¹id:"+nodes[i].id+"èŠ‚ç‚¹åç§°"+v);
+            //console.log("½Úµãid:"+nodes[i].id+"½ÚµãÃû³Æ"+v);
                  if (i == 0) {
                     qjz = nodes[i].id;
                 } else {
@@ -255,12 +255,12 @@ $SAP_ID=$ROW2[0];
                 }
             }
             console.log(qjz);
-            var ks = qjz; //å¼€å§‹
-            //var js = $("#js").val(); //ç»“æŸ
-            var js = ""; //ç»“æŸ
-            var nian = $("#nian option:selected").val(); //å¹´
-            var yue = $("#yue option:selected").val(); //æœˆ
-            var bhbfzc = $("#bhbfzc option:selected").val(); //åŒ…å«æŠ¥åºŸèµ„äº§
+            var ks = qjz; //¿ªÊ¼
+            //var js = $("#js").val(); //½áÊø
+            var js = ""; //½áÊø
+            var nian = $("#nian option:selected").val(); //Äê
+            var yue = $("#yue option:selected").val(); //ÔÂ
+            var bhbfzc = $("#bhbfzc option:selected").val(); //°üº¬±¨·Ï×Ê²ú
 
             var url = "http://192.168.1.88:8086/handler1.ashx?t=SLTANLA&I_BUKRS=" + ggdm + "&I_YEAR=" + nian +
                 "&I_PERIO=" + yue + "&I_DEAKT=" + bhbfzc + "&OPTION=" + qj + "&LOW=" + ks + "&HIGH=" +
@@ -270,38 +270,38 @@ $SAP_ID=$ROW2[0];
                 elem: '#demo'
                 , width: 1200
                 , height: 600
-                , url: url //æ•°æ®æ¥å£
-                , title: 'ç”¨æˆ·è¡¨'
-                , cols: [[ //è¡¨å¤´
-                    { field: 'BUKRS', width: 86, title: 'å…¬å¸ä»£ç ' }
-                    , { field: 'ANLN1', width: 125, title: 'èµ„äº§ç¼–ç ' }
-                    , { field: 'TXT50', width: 327, title: 'èµ„äº§æè¿°' }
-                    , { field: 'ANLKL', width: 86, title: 'èµ„äº§åˆ†ç±»' }
-                    , { field: 'TXK20', width: 162, title: 'èµ„äº§ç±»åˆ«å' }
-                    , { field: 'KOSTL', width: 109, title: 'æˆæœ¬ä¸­å¿ƒ' }
-                    , { field: 'KTEXT', width: 185, title: 'æˆæœ¬ä¸­å¿ƒæè¿°' }
-                    , { field: 'LIFNR', width: 94, title: 'ä¾›åº”å•†ä»£ç ' }
-                    , { field: 'NAME1', width: 199, title: 'ä¾›åº”å•†åç§°' }
-                    , { field: 'ZRZRQ', width: 103, title: 'å…¥è´¦æ—¥æœŸ' }
-                    , { field: 'AFABG', width: 103, title: 'ä½¿ç”¨æ—¥æœŸ' }
-                    , { field: 'DEAKT', width: 103, title: 'ä¸æ´»åŠ¨æ—¥æœŸ' }
-                    , { field: 'STORT', width: 86, title: 'èµ„äº§åœ°ç‚¹' }
-                    , { field: 'MENGE', width: 86, title: 'æ•°é‡' }
-                    , { field: 'ZZCYZ', width: 104, title: 'èµ„äº§åŸå€¼' }
-                    , { field: 'ZLJZJ', width: 98, title: 'ç´¯è®¡æŠ˜æ—§' }
-                    , { field: 'ZDQZJ', width: 90, title: 'å½“æœŸæŠ˜æ—§' }
-                    , { field: 'ZSYSM', width: 144, title: 'è®¡åˆ’ä½¿ç”¨å¯¿å‘½ï¼ˆæœˆï¼‰' }
-                    , { field: 'ZYSYSM', width: 144, title: 'å·²ä½¿ç”¨å¯¿å‘½ï¼ˆæœˆï¼‰' }
-                    , { field: 'ZSYSYSM', width: 144, title: 'å‰©ä½™ä½¿ç”¨å¯¿å‘½ï¼ˆæœˆï¼‰' }
-                    , { field: 'ZQCYZ', width: 98, title: 'æœŸåˆåŸå€¼' }
-                    , { field: 'ZYZZJ', width: 104, title: 'åŸå€¼å¢åŠ ' }
-                    , { field: 'ZYZJS', width: 86, title: 'åŸå€¼å‡å°‘' }
-                    , { field: 'ZQMYZ', width: 104, title: 'æœŸæœ«åŸå€¼' }
-                    , { field: 'ZQCYE', width: 138, title: 'ç´¯è®¡æŠ˜æ—§æœŸåˆä½™é¢' }
-                    , { field: 'ZBNZJE', width: 98, title: 'æœ¬å¹´æŠ˜æ—§é¢' }
-                    , { field: 'ZQMLJZJ', width: 108, title: 'æœŸæœ«ç´¯è®¡æŠ˜æ—§' }
-                    , { field: 'ZQCJE', width: 86, title: 'æœŸåˆå‡€é¢' }
-                    , { field: 'ZQMJZ', width: 104, title: 'æœŸæœ«å‡€å€¼' }
+                , url: url //Êı¾İ½Ó¿Ú
+                , title: 'ÓÃ»§±í'
+                , cols: [[ //±íÍ·
+                    { field: 'BUKRS', width: 86, title: '¹«Ë¾´úÂë' }
+                    , { field: 'ANLN1', width: 125, title: '×Ê²ú±àÂë' }
+                    , { field: 'TXT50', width: 327, title: '×Ê²úÃèÊö' }
+                    , { field: 'ANLKL', width: 86, title: '×Ê²ú·ÖÀà' }
+                    , { field: 'TXK20', width: 162, title: '×Ê²úÀà±ğÃû' }
+                    , { field: 'KOSTL', width: 109, title: '³É±¾ÖĞĞÄ' }
+                    , { field: 'KTEXT', width: 185, title: '³É±¾ÖĞĞÄÃèÊö' }
+                    , { field: 'LIFNR', width: 94, title: '¹©Ó¦ÉÌ´úÂë' }
+                    , { field: 'NAME1', width: 199, title: '¹©Ó¦ÉÌÃû³Æ' }
+                    , { field: 'ZRZRQ', width: 103, title: 'ÈëÕËÈÕÆÚ' }
+                    , { field: 'AFABG', width: 103, title: 'Ê¹ÓÃÈÕÆÚ' }
+                    , { field: 'DEAKT', width: 103, title: '²»»î¶¯ÈÕÆÚ' }
+                    , { field: 'STORT', width: 86, title: '×Ê²úµØµã' }
+                    , { field: 'MENGE', width: 86, title: 'ÊıÁ¿' }
+                    , { field: 'ZZCYZ', width: 104, title: '×Ê²úÔ­Öµ' }
+                    , { field: 'ZLJZJ', width: 98, title: 'ÀÛ¼ÆÕÛ¾É' }
+                    , { field: 'ZDQZJ', width: 90, title: 'µ±ÆÚÕÛ¾É' }
+                    , { field: 'ZSYSM', width: 144, title: '¼Æ»®Ê¹ÓÃÊÙÃü£¨ÔÂ£©' }
+                    , { field: 'ZYSYSM', width: 144, title: 'ÒÑÊ¹ÓÃÊÙÃü£¨ÔÂ£©' }
+                    , { field: 'ZSYSYSM', width: 144, title: 'Ê£ÓàÊ¹ÓÃÊÙÃü£¨ÔÂ£©' }
+                    , { field: 'ZQCYZ', width: 98, title: 'ÆÚ³õÔ­Öµ' }
+                    , { field: 'ZYZZJ', width: 104, title: 'Ô­ÖµÔö¼Ó' }
+                    , { field: 'ZYZJS', width: 86, title: 'Ô­Öµ¼õÉÙ' }
+                    , { field: 'ZQMYZ', width: 104, title: 'ÆÚÄ©Ô­Öµ' }
+                    , { field: 'ZQCYE', width: 138, title: 'ÀÛ¼ÆÕÛ¾ÉÆÚ³õÓà¶î' }
+                    , { field: 'ZBNZJE', width: 98, title: '±¾ÄêÕÛ¾É¶î' }
+                    , { field: 'ZQMLJZJ', width: 108, title: 'ÆÚÄ©ÀÛ¼ÆÕÛ¾É' }
+                    , { field: 'ZQCJE', width: 86, title: 'ÆÚ³õ¾»¶î' }
+                    , { field: 'ZQMJZ', width: 104, title: 'ÆÚÄ©¾»Öµ' }
 
                 ]]
             });
