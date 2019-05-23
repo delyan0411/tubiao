@@ -146,7 +146,7 @@ $SAP_ID=$ROW2[0];
 
     </div>
 
-    <script src="./layui/layui.all.js"></script>
+    <script src="./layui/layui.all.js" charset="gb2312" ></script>
     <link rel="stylesheet" href="ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
 	<script type="text/javascript" src="jquery-2.2.4.js"></script>
   <script type="text/javascript" src="ztree/js/jquery.ztree.core.js"></script>
@@ -189,7 +189,7 @@ $SAP_ID=$ROW2[0];
 });
         layui.use(['table'], function () {
             table = layui.table
-            //search(layui.table);
+            search(layui.table);
 
 
             // $.ajax({
@@ -233,10 +233,12 @@ $SAP_ID=$ROW2[0];
             var qj = "EQ"; //区间
             //所有的checkbox选中项
             var qjz = '';
-            var data=[];
-  var cbzx=$.fn.zTree.getZTreeObj("dept"),
-            nodes=cbzx.getCheckedNodes(true),
-            v="";
+            var data=[];           
+            var cbzx=$.fn.zTree.getZTreeObj("dept");
+            if(cbzx){
+             var nodes=cbzx.getCheckedNodes(true);             
+             var v="";
+             
             for(var i=0;i<nodes.length;i++){
               var item={};
             v+=nodes[i].name + ",";
@@ -253,6 +255,7 @@ $SAP_ID=$ROW2[0];
                 } else {
                     qjz += ',' + nodes[i].id;
                 }
+            }
             }
             console.log(qjz);
             var ks = qjz; //开始
@@ -272,6 +275,9 @@ $SAP_ID=$ROW2[0];
                 , height: 600
                 , url: url //数据接口
                 , title: '用户表'
+                , text: {
+    none: '暂无相关数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+  }
                 , cols: [[ //表头
                     { field: 'BUKRS', width: 86, title: '公司代码' }
                     , { field: 'ANLN1', width: 125, title: '资产编码' }
