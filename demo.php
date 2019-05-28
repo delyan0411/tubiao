@@ -75,7 +75,7 @@ $SAP_ID=$ROW2[0];
                 <ul id="dept" class="ztree"  style="float: left;"></ul>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">成本中心</label>
+                <label class="layui-form-label" style="width: 100%;text-align: center;">九洲集团固定资产清单</label>
                 <div class="cbzxlist" style="display:inline;"></div>
                 <!-- <div class="layui-inline">
                     <select name="city" lay-verify="required" id="qj">
