@@ -61,7 +61,6 @@ if ($ROW2 = mysql_fetch_row($cursor2))
 </head>
 
 <body>
-
   <div class="layui-container container">
     <div class="layui-form">
       <!-- <div class="layui-form-item">
