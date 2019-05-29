@@ -1,313 +1,335 @@
-
- <?
+<?
 include_once "inc/auth.inc.php";
 include_once "inc/utility_all.php";
 
- $query = "SELECT SAP_DEPT_ID FROM department WHERE DEPT_ID=".$_SESSION["LOGIN_DEPT_ID"];
+$query = "SELECT SAP_DEPT_ID FROM department WHERE DEPT_ID=" . $_SESSION["LOGIN_DEPT_ID"];
 $cursor = exequery(TD::conn(), $query);
-if($ROW=mysql_fetch_row($cursor))
-$SAP_DEPT_ID=$ROW[0];
+if ($ROW = mysql_fetch_row($cursor))
+  $SAP_DEPT_ID = $ROW[0];
 
-$query2 = "SELECT BYNAME FROM `user` WHERE `user_id`='".$_SESSION["LOGIN_USER_ID"]."'";
+$query2 = "SELECT BYNAME FROM `user` WHERE `user_id`='" . $_SESSION["LOGIN_USER_ID"] . "'";
 $cursor2 = exequery(TD::conn(), $query2);
-if($ROW2=mysql_fetch_row($cursor2))
-$SAP_ID=$ROW2[0];
+if ($ROW2 = mysql_fetch_row($cursor2))
+  $SAP_ID = $ROW2[0];
 
 // echo $SAP_DEPT_ID;
- ?>
+?>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>demo</title>
-    <link rel="stylesheet" href="./layui/css/layui.css">
-    <style>
-        .container {
-            padding: 20px 0;
-            width: 1170px;
-            margin-left: 310px;
-        }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>demo</title>
+  <link rel="stylesheet" href="./layui/css/layui.css">
+  <style>
+    .container {
+      padding: 20px 0;
+      width: 1170px;
+      margin-left: 310px;
+    }
 
-        .select-item {
-            float: left;
-        }
+    .select-item {
+      float: left;
+    }
 
-        .select-item .layui-form-label {
-            width: auto;
-        }
+    .select-item .layui-form-label {
+      width: auto;
+    }
 
-        .select-item-first .layui-form-label {
-            width: 80px;
-        }
+    .select-item-first .layui-form-label {
+      width: 80px;
+    }
 
-        .layui-table-cell,
-        .layui-table-tool-panel li {
-            overflow: unset;
-            text-overflow: unset;
-        }
-        .tree-box {
-          position: absolute;
-          top: 40px;
-          left: 50%;
-          margin-left: -890px;
-          width: 300px;
-          height: 500px;
-          overflow: auto;
-          border: 1px solid #aaa;
-        }
-    </style>
+    .layui-table-cell,
+    .layui-table-tool-panel li {
+      overflow: unset;
+      text-overflow: unset;
+    }
+
+    .tree-box {
+      position: absolute;
+      top: 40px;
+      left: 50%;
+      margin-left: -890px;
+      width: 300px;
+      height: 500px;
+      overflow: auto;
+      border: 1px solid #aaa;
+    }
+  </style>
 </head>
 
 <body>
 
-    <div class="layui-container container">
-        <div class="layui-form">
-            <!-- <div class="layui-form-item">
-                <label class="layui-form-label">ÂÖ¨Âè∏‰ª£Á†Å</label>
+  <div class="layui-container container">
+    <div class="layui-form">
+      <!-- <div class="layui-form-item">
+                <label class="layui-form-label">π´Àæ¥˙¬Î</label>
                 <div class="layui-input-block">
-                    <input type="text" id="ggdm" name="title" required lay-verify="required" placeholder="ËØ∑ËæìÂÖ•Ê†áÈ¢ò"
+                    <input type="text" id="ggdm" name="title" required lay-verify="required" placeholder="«Î ‰»Î±ÍÃ‚"
                         autocomplete="off" class="layui-input" value="1000">
                 </div>
             </div> -->
-            <div class="tree-box">
-                <ul id="dept" class="ztree"  style="float: left;"></ul>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">ÊàêÊú¨‰∏≠ÂøÉ</label>
-                <div class="cbzxlist" style="display:inline;"></div>
-                <!-- <div class="layui-inline">
+      <div class="tree-box">
+        <ul id="dept" class="ztree" style="float: left;"></ul>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">≥…±æ÷––ƒ</label>
+        <div class="cbzxlist" style="display:inline;"></div>
+        <!-- <div class="layui-inline">
                     <select name="city" lay-verify="required" id="qj">
-                        <option value="BT">Âå∫Èó¥</option>
-                        <option value="EQ">Âçï‰∏™(Â§ö‰∏™‰∏çËøûÁª≠ÁöÑ,)</option>
+                        <option value="BT">«¯º‰</option>
+                        <option value="EQ">µ•∏ˆ(∂‡∏ˆ≤ª¡¨–¯µƒ,)</option>
                     </select>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">ËåÉÂõ¥</label>
+                    <label class="layui-form-label">∑∂Œß</label>
                     <div class="layui-input-inline" style="width: 100px;">
-                        <input type="text" id="ks" value="1000100000" name="price_min" placeholder="ËØ∑ËæìÂÖ•id" autocomplete="off" class="layui-input">
+                        <input type="text" id="ks" value="1000100000" name="price_min" placeholder="«Î ‰»Îid" autocomplete="off" class="layui-input">
                     </div>
                     <div class="layui-form-mid">-</div>
                     <div class="layui-input-inline" style="width: 100px;">
-                        <input type="text" id="js" value="1000299999" name="price_max" placeholder="ËØ∑ËæìÂÖ•id" autocomplete="off" class="layui-input">
+                        <input type="text" id="js" value="1000299999" name="price_max" placeholder="«Î ‰»Îid" autocomplete="off" class="layui-input">
                     </div>
                 </div> -->
-            </div>
+      </div>
 
-            <div class="layui-form-item select-list">
-                <div class="select-item select-item-first">
-                    <label class="layui-form-label">Âπ¥</label>
-                    <div class="layui-inline">
-                        <select name="city" lay-verify="required" id="nian">
-                            <option value="2019">2019</option>
-                            <option value="2018">2018</option>
-                            <option value="2017">2017</option>
-                            <option value="2016">2016</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="select-item">
-                    <label class="layui-form-label">Êúà</label>
-                    <div class="layui-inline">
-                        <select name="city" id="yue" lay-verify="required">
-                            <option value="01">01</option>
-                            <option value="02">02</option>
-                            <option value="03">03</option>
-                            <option value="04">04</option>
-                            <option value="05">05</option>
-                            <option value="06">06</option>
-                            <option value="07">07</option>
-                            <option value="08">08</option>
-                            <option value="09">09</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="select-item">
-                    <label class="layui-form-label">ÂåÖÂê´Êä•Â∫üËµÑ‰∫ß</label>
-                    <div class="layui-inline">
-                        <select name="city" id="bhbfzc" lay-verify="required">
-                            <option value="">Âê¶</option>
-                            <option value="X">ÊòØ</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="select-item">
-                    <button class="layui-btn search-btn">Êü•ËØ¢</button>
-                </div>
-            </div>
+      <div class="layui-form-item select-list">
+        <div class="select-item select-item-first">
+          <label class="layui-form-label">ƒÍ</label>
+          <div class="layui-inline">
+            <select name="city" lay-verify="required" id="nian">
+              <option value="2019">2019</option>
+              <option value="2018">2018</option>
+              <option value="2017">2017</option>
+              <option value="2016">2016</option>
+            </select>
+          </div>
         </div>
-
-
-        <table class="layui-hide" id="demo" lay-filter="test"></table>
-
+        <div class="select-item">
+          <label class="layui-form-label">‘¬</label>
+          <div class="layui-inline">
+            <select name="city" id="yue" lay-verify="required">
+              <option value="01">01</option>
+              <option value="02">02</option>
+              <option value="03">03</option>
+              <option value="04">04</option>
+              <option value="05">05</option>
+              <option value="06">06</option>
+              <option value="07">07</option>
+              <option value="08">08</option>
+              <option value="09">09</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+            </select>
+          </div>
+        </div>
+        <div class="select-item">
+          <label class="layui-form-label">∞¸∫¨±®∑œ◊ ≤˙</label>
+          <div class="layui-inline">
+            <select name="city" id="bhbfzc" lay-verify="required">
+              <option value="">∑Ò</option>
+              <option value="X"> «</option>
+            </select>
+          </div>
+        </div>
+        <div class="select-item">
+          <button class="layui-btn search-btn">≤È—Ø</button>
+        </div>
+      </div>
     </div>
 
-    <script src="./layui/layui.all.js"></script>
-    <link rel="stylesheet" href="ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
-	<script type="text/javascript" src="jquery-2.2.4.js"></script>
+
+    <table class="layui-hide" id="demo" lay-filter="test"></table>
+
+  </div>
+
+  <script src="./layui/layui.all.js"></script>
+  <link rel="stylesheet" href="ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+  <script type="text/javascript" src="jquery-2.2.4.js"></script>
   <script type="text/javascript" src="ztree/js/jquery.ztree.core.js"></script>
   <script type="text/javascript" src="ztree/js/jquery.ztree.excheck.js"></script>
-    <script>
-          var testurl="http://localhost:22674/";
-    var zsurl="http://192.168.1.88:8086/";
-    var url=zsurl;
-   
-  
-		var settingcbzx = {
-			data: {
-				simpleData: {
-					enable: true
-				}
+  <script>
+    var testurl = "http://localhost:22674/";
+    var zsurl = "http://192.168.1.88:8086/";
+    var url = zsurl;
+
+
+    var settingcbzx = {
+      data: {
+        simpleData: {
+          enable: true
+        }
       },
-      check:{
+      check: {
         enable: true,
-		chkStyle: "checkbox",
-		chkboxType: { "Y": "ps", "N": "ps" }
+        chkStyle: "checkbox",
+        chkboxType: {
+          "Y": "ps",
+          "N": "ps"
+        }
       }
       // check: {
-			// 	enable: true
-			// }
-      
-		};
+      // 	enable: true
+      // }
+
+    };
 
 
-    
-		$(document).ready(function(){
-     
+
+    $(document).ready(function() {
+
       $.ajax({
-        url: url+"Dept_Cbzx.ashx?t=GetUserCbzx&uid=<?echo $SAP_ID ?> &deptid=<?echo $SAP_DEPT_ID ?> ",
+        url: url + "Dept_Cbzx.ashx?t=GetUserCbzx&uid=<? echo $SAP_ID ?> &deptid=<? echo $SAP_DEPT_ID ?> ",
         type: 'post',
-        success: function (data) {
-          var zNodes=data;
-      $.fn.zTree.init($("#dept"), settingcbzx, zNodes);
+        success: function(data) {
+          var zNodes = data;
+          $.fn.zTree.init($("#dept"), settingcbzx, zNodes);
         }
+      })
+    });
+    layui.use(['table'], function() {
+      table = layui.table
+      search(layui.table);
+
+
+      // $.ajax({
+      //     url: "http://192.168.1.88:8086/Dept_Cbzx.ashx?t=GETCbzxDeptList",
+      //     type: 'post',
+      //     data: { sap_dept_id: <? echo $SAP_DEPT_ID ?> },
+      //     success: function (data) {
+      //         //$(".cbzxlist").html("");
+      //         if (data.code == 0) {
+      //             if (data.CBZX_ID_STR) {
+      //                 var str = data.CBZX_ID_STR;
+      //                 var arr = str.split(",");
+      //                 var checkhtml = "";
+      //                 var arrids = [];
+      //                 $.each(arr, function (index, data) {
+      //                     var arr2 = data.split("|");
+      //                     //ulhtml+="<li class=\"inp\">"+arr2[0]+"</li>";             
+      //                     checkhtml += "<input type=\"checkbox\" name=\"cbzx\" title=\"" + arr2[0] + "\" lay-skin=\"primary\" value=\"" + arr2[1] + "\" />";
+      //                     //console.log(checkhtml);    
+      //                 });
+      //                 $(".cbzxlist").html(checkhtml);
+      //                 //◊Ó∫Û÷ÿ–¬º”‘ÿ“ªœ¬æÕø…“‘¡À
+      //                 layui.use('form', function () {
+      //                     var form = layui.form;
+      //                     //∏˘æ›µƒtype¿‡–Õ–ﬁ∏ƒ
+      //                     form.render('checkbox');
+      //                 });
+      //             }
+      //         }
+      //     }
+      // })
+
+      $(".search-btn").on("click", function() {
+        search(layui.table);
+      })
     })
-});
-        layui.use(['table'], function () {
-            table = layui.table
-            //search(layui.table);
 
-
-            // $.ajax({
-            //     url: "http://192.168.1.88:8086/Dept_Cbzx.ashx?t=GETCbzxDeptList",
-            //     type: 'post',
-            //     data: { sap_dept_id: <?echo $SAP_DEPT_ID ?> },
-            //     success: function (data) {
-            //         //$(".cbzxlist").html("");
-            //         if (data.code == 0) {
-            //             if (data.CBZX_ID_STR) {
-            //                 var str = data.CBZX_ID_STR;
-            //                 var arr = str.split(",");
-            //                 var checkhtml = "";
-            //                 var arrids = [];
-            //                 $.each(arr, function (index, data) {
-            //                     var arr2 = data.split("|");
-            //                     //ulhtml+="<li class=\"inp\">"+arr2[0]+"</li>";             
-            //                     checkhtml += "<input type=\"checkbox\" name=\"cbzx\" title=\"" + arr2[0] + "\" lay-skin=\"primary\" value=\"" + arr2[1] + "\" />";
-            //                     //console.log(checkhtml);    
-            //                 });
-            //                 $(".cbzxlist").html(checkhtml);
-            //                 //ÊúÄÂêéÈáçÊñ∞Âä†ËΩΩ‰∏Ä‰∏ãÂ∞±ÂèØ‰ª•‰∫Ü
-            //                 layui.use('form', function () {
-            //                     var form = layui.form;
-            //                     //Ê†πÊçÆÁöÑtypeÁ±ªÂûã‰øÆÊîπ
-            //                     form.render('checkbox');
-            //                 });
-            //             }
-            //         }
-            //     }
-            // })
-
-            $(".search-btn").on("click", function () {
-                search(layui.table);
-            })
-        })
-        function search(table) {
-            //var ggdm = $("#ggdm").val(); //ÂÖ¨Âè∏‰ª£Á†Å
-            var ggdm = "1000"; //ÂÖ¨Âè∏‰ª£Á†Å
-            //var qj = $("#qj option:selected").val(); //Âå∫Èó¥
-            var qj = "EQ"; //Âå∫Èó¥
-            //ÊâÄÊúâÁöÑcheckboxÈÄâ‰∏≠È°π
-            var qjz = '';
-            var data=[];
-  var cbzx=$.fn.zTree.getZTreeObj("dept"),
-            nodes=cbzx.getCheckedNodes(true),
-            v="";
-            for(var i=0;i<nodes.length;i++){
-              var item={};
-            v+=nodes[i].name + ",";
-            //console.log(nodes[i].id); //Ëé∑ÂèñÈÄâ‰∏≠ËäÇÁÇπÁöÑÂÄº
-            console.log("ËäÇÁÇπid:"+nodes[i].id+";;;ËäÇÁÇπÂêçÁß∞"+nodes[i].name+";;;;Áà∂ËäÇÁÇπ:"+nodes[i].pid+";;;;shibushifuËäÇÁÇπ:"+nodes[i].isParent+"");
-            // item.id=nodes[i].id;
-            // item.name=nodes[i].name;
-            // item.pid=nodes[i].pid;
-            // item.isParent=nodes[i].isParent==true?1:0;
-            // data.push(item);
-            //console.log("ËäÇÁÇπid:"+nodes[i].id+"ËäÇÁÇπÂêçÁß∞"+v);
-                 if (i == 0) {
-                    qjz = nodes[i].id;
-                } else {
-                    qjz += ',' + nodes[i].id;
-                }
-            }
-            console.log(qjz);
-            var ks = qjz; //ÂºÄÂßã
-            //var js = $("#js").val(); //ÁªìÊùü
-            var js = ""; //ÁªìÊùü
-            var nian = $("#nian option:selected").val(); //Âπ¥
-            var yue = $("#yue option:selected").val(); //Êúà
-            var bhbfzc = $("#bhbfzc option:selected").val(); //ÂåÖÂê´Êä•Â∫üËµÑ‰∫ß
-
-            var url = "http://192.168.1.88:8086/handler1.ashx?t=SLTANLA&I_BUKRS=" + ggdm + "&I_YEAR=" + nian +
-                "&I_PERIO=" + yue + "&I_DEAKT=" + bhbfzc + "&OPTION=" + qj + "&LOW=" + ks + "&HIGH=" +
-                js + "";
-
-            table.render({
-                elem: '#demo'
-                , width: 1200
-                , height: 600
-                , url: url //Êï∞ÊçÆÊé•Âè£
-                , title: 'Áî®Êà∑Ë°®'
-                , cols: [[ //Ë°®Â§¥
-                    { field: 'BUKRS', width: 86, title: 'ÂÖ¨Âè∏‰ª£Á†Å' }
-                    , { field: 'ANLN1', width: 125, title: 'ËµÑ‰∫ßÁºñÁ†Å' }
-                    , { field: 'TXT50', width: 327, title: 'ËµÑ‰∫ßÊèèËø∞' }
-                    , { field: 'ANLKL', width: 86, title: 'ËµÑ‰∫ßÂàÜÁ±ª' }
-                    , { field: 'TXK20', width: 162, title: 'ËµÑ‰∫ßÁ±ªÂà´Âêç' }
-                    , { field: 'KOSTL', width: 109, title: 'ÊàêÊú¨‰∏≠ÂøÉ' }
-                    , { field: 'KTEXT', width: 185, title: 'ÊàêÊú¨‰∏≠ÂøÉÊèèËø∞' }
-                    , { field: 'LIFNR', width: 94, title: '‰æõÂ∫îÂïÜ‰ª£Á†Å' }
-                    , { field: 'NAME1', width: 199, title: '‰æõÂ∫îÂïÜÂêçÁß∞' }
-                    , { field: 'ZRZRQ', width: 103, title: 'ÂÖ•Ë¥¶Êó•Êúü' }
-                    , { field: 'AFABG', width: 103, title: '‰ΩøÁî®Êó•Êúü' }
-                    , { field: 'DEAKT', width: 103, title: '‰∏çÊ¥ªÂä®Êó•Êúü' }
-                    , { field: 'STORT', width: 86, title: 'ËµÑ‰∫ßÂú∞ÁÇπ' }
-                    , { field: 'MENGE', width: 86, title: 'Êï∞Èáè' }
-                    , { field: 'ZZCYZ', width: 104, title: 'ËµÑ‰∫ßÂéüÂÄº' }
-                    , { field: 'ZLJZJ', width: 98, title: 'Á¥ØËÆ°ÊäòÊóß' }
-                    , { field: 'ZDQZJ', width: 90, title: 'ÂΩìÊúüÊäòÊóß' }
-                    , { field: 'ZSYSM', width: 144, title: 'ËÆ°Âàí‰ΩøÁî®ÂØøÂëΩÔºàÊúàÔºâ' }
-                    , { field: 'ZYSYSM', width: 144, title: 'Â∑≤‰ΩøÁî®ÂØøÂëΩÔºàÊúàÔºâ' }
-                    , { field: 'ZSYSYSM', width: 144, title: 'Ââ©‰Ωô‰ΩøÁî®ÂØøÂëΩÔºàÊúàÔºâ' }
-                    , { field: 'ZQCYZ', width: 98, title: 'ÊúüÂàùÂéüÂÄº' }
-                    , { field: 'ZYZZJ', width: 104, title: 'ÂéüÂÄºÂ¢ûÂä†' }
-                    , { field: 'ZYZJS', width: 86, title: 'ÂéüÂÄºÂáèÂ∞ë' }
-                    , { field: 'ZQMYZ', width: 104, title: 'ÊúüÊú´ÂéüÂÄº' }
-                    , { field: 'ZQCYE', width: 138, title: 'Á¥ØËÆ°ÊäòÊóßÊúüÂàù‰ΩôÈ¢ù' }
-                    , { field: 'ZBNZJE', width: 98, title: 'Êú¨Âπ¥ÊäòÊóßÈ¢ù' }
-                    , { field: 'ZQMLJZJ', width: 108, title: 'ÊúüÊú´Á¥ØËÆ°ÊäòÊóß' }
-                    , { field: 'ZQCJE', width: 86, title: 'ÊúüÂàùÂáÄÈ¢ù' }
-                    , { field: 'ZQMJZ', width: 104, title: 'ÊúüÊú´ÂáÄÂÄº' }
-
-                ]]
-            });
+    function search(table) {
+      //var ggdm = $("#ggdm").val(); //π´Àæ¥˙¬Î
+      var ggdm = "1000"; //π´Àæ¥˙¬Î
+      //var qj = $("#qj option:selected").val(); //«¯º‰
+      var qj = "EQ"; //«¯º‰
+      //À˘”–µƒcheckbox—°÷–œÓ
+      var qjz = '';
+      var data = [];
+      var cbzx = $.fn.zTree.getZTreeObj("dept"),
+        nodes = cbzx.getCheckedNodes(true),
+        v = "";
+      for (var i = 0; i < nodes.length; i++) {
+        var item = {};
+        v += nodes[i].name + ",";
+        //console.log(nodes[i].id); //ªÒ»°—°÷–Ω⁄µ„µƒ÷µ
+        console.log("Ω⁄µ„id:" + nodes[i].id + ";;;Ω⁄µ„√˚≥∆" + nodes[i].name + ";;;;∏∏Ω⁄µ„:" + nodes[i].pid + ";;;;shibushifuΩ⁄µ„:" + nodes[i].isParent + "");
+        // item.id=nodes[i].id;
+        // item.name=nodes[i].name;
+        // item.pid=nodes[i].pid;
+        // item.isParent=nodes[i].isParent==true?1:0;
+        // data.push(item);
+        //console.log("Ω⁄µ„id:"+nodes[i].id+"Ω⁄µ„√˚≥∆"+v);
+        if (i == 0) {
+          qjz = nodes[i].id;
+        } else {
+          qjz += ',' + nodes[i].id;
         }
+      }
+      console.log(qjz);
+      var ks = qjz; //ø™ º
+      //var js = $("#js").val(); //Ω· ¯
+      var js = ""; //Ω· ¯
+      var nian = $("#nian option:selected").val(); //ƒÍ
+      var yue = $("#yue option:selected").val(); //‘¬
+      var bhbfzc = $("#bhbfzc option:selected").val(); //∞¸∫¨±®∑œ◊ ≤˙
 
-    </script>
+      var url = "http://192.168.1.88:8086/handler1.ashx?t=SLTANLA&I_BUKRS=" + ggdm + "&I_YEAR=" + nian +
+        "&I_PERIO=" + yue + "&I_DEAKT=" + bhbfzc + "&OPTION=" + qj + "&LOW=" + ks + "&HIGH=" +
+        js + "";
+
+      table.render({
+        elem: '#demo',
+        width: 1200,
+        height: 600,
+        url: url // ˝æ›Ω”ø⁄
+          ,
+        title: '”√ªß±Ì',
+        cols: [
+          [ //±ÌÕ∑
+            {
+              field: 'BUKRS',
+              width: 86,
+              title: 'π´Àæ¥˙¬Î'
+            }, {
+              field: 'ANLN1',
+              width: 125,
+              title: '◊ ≤˙±‡¬Î'
+            }, {
+              field: 'TXT50',
+              width: 327,
+              title: '◊ ≤˙√Ë ˆ'
+            }, {
+              field: 'KOSTL',
+              width: 109,
+              title: '≥…±æ÷––ƒ'
+            }, {
+              field: 'KTEXT',
+              width: 185,
+              title: '≥…±æ÷––ƒ√Ë ˆ'
+            }, {
+              field: 'ZRZRQ',
+              width: 103,
+              title: '»Î’À»’∆⁄'
+            }, {
+              field: 'STORT',
+              width: 86,
+              title: '±£π‹»À'
+            }, {
+              field: 'MENGE',
+              width: 86,
+              title: ' ˝¡ø'
+            }, {
+              field: 'ZZCYZ',
+              width: 104,
+              title: '◊ ≤˙‘≠÷µ'
+            }, {
+              field: 'ZDQZJ',
+              width: 90,
+              title: 'µ±∆⁄’€æ…'
+            }, {
+              field: 'ZQMJZ',
+              width: 104,
+              title: '∆⁄ƒ©æª÷µ'
+            }
+
+          ]
+        ]
+      });
+    }
+  </script>
 </body>
 
 </html>
