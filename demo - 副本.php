@@ -173,8 +173,8 @@ $SAP_ID=$ROW2[0];
     })
 });
         layui.use(['table'], function () {
-            table = layui.table
-            //search(layui.table);
+            // table = layui.table
+            search(layui.table);
 
 
             // $.ajax({
