@@ -25,6 +25,13 @@
       padding: 10px;
       font-size: 14px;
     }
+    .state-green {
+      color: green;
+      font-weight: bold;
+    }
+    .state-grey {
+      color: gray;
+    }
   </style>
 </head>
 <body>
@@ -66,22 +73,31 @@
             "13": "退货处理中"
           }
           for(var i = 0; i < list.length; i++) {
+            var item = list[i];
+            var flag = item.total_state == "2" || item.total_state == "3" || item.total_state == "4" || item.total_state == "11";
+            var stateColor = flag ? "state-green" : "state-grey";
+            
             html += '<tr>' + 
-            '<td>' + list[i].order_no + '</td>' +
-            '<td>' + list[i].store_name + '</td>' +
-            '<td>' + list[i].order_money + '</td>' +
-            '<td>' + list[i].pay_type_name + '</td>' +
-            '<td>' + list[i].pay_time + '</td>' +
-            '<td>' + list[i].add_time + '</td>' +
-            '<td>' + orderStatus[list[i].total_state] + '</td>' +
-            '<td>' + list[i].ordersdetails[0].product_code + 
+            '<td>' + item.order_no + '</td>' +
+            '<td>' + item.store_name + '</td>' +
+            '<td>' + item.order_money + '</td>' +
+            '<td>' + item.pay_type_name + '</td>' +
+            '<td>' + item.pay_time + '</td>' +
+            '<td>' + item.add_time + '</td>' +
+            '<td class=' + stateColor +  '>' + orderStatus[item.total_state] + '</td>' + 
+            '<td>';
+            for (var j = 0; j < item.ordersdetails.length; j++) {
+              var detail = item.ordersdetails[j];
+              html +=  detail.product_code + 
               ' / ' +
-              list[i].ordersdetails[0].product_name +
+              detail.product_name +
               ' / ' +
-              list[i].ordersdetails[0].sale_num +
+              detail.sale_num +
               ' / ' +
-              list[i].ordersdetails[0].deal_price +
-              '</td>' +
+              detail.deal_price +
+              '\n';
+            }
+            html += '</td>' +
             '</tr>';
           }
 
