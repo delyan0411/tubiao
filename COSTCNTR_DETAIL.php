@@ -199,13 +199,43 @@ if ($ROW2 = mysql_fetch_row($cursor2))
         })
 
         function search (table) {
-            var ggdm = $("#ggdm").val(); //公司代码
-                var qj = $("#qj option:selected").val(); //区间
-                var ks = $("#ks").val(); //开始
-                var js = $("#js").val(); //结束
-                var nian = $("#nian option:selected").val(); //年
-                var yue = $("#yue option:selected").val(); //月
-                //var bhbfzc = $("#bhbfzc option:selected").val(); //包含报废资产
+            //var ggdm = $("#ggdm").val(); //公司代码
+            var ggdm = "1000"; //公司代码
+            //var qj = $("#qj option:selected").val(); //区间
+            var qj = "EQ"; //区间
+            //所有的checkbox选中项
+            var qjz = '';
+            var data=[];           
+            var cbzx=$.fn.zTree.getZTreeObj("dept");
+            if(cbzx){
+             var nodes=cbzx.getCheckedNodes(true);             
+             var v="";
+             
+            for(var i=0;i<nodes.length;i++){
+              var item={};
+            v+=nodes[i].name + ",";
+            //console.log(nodes[i].id); //获取选中节点的值
+            console.log("节点id:"+nodes[i].id+";;;节点名称"+nodes[i].name+";;;;父节点:"+nodes[i].pid+";;;;shibushifu节点:"+nodes[i].isParent+"");
+            // item.id=nodes[i].id;
+            // item.name=nodes[i].name;
+            // item.pid=nodes[i].pid;
+            // item.isParent=nodes[i].isParent==true?1:0;
+            // data.push(item);
+            //console.log("节点id:"+nodes[i].id+"节点名称"+v);
+                 if (i == 0) {
+                    qjz = nodes[i].id;
+                } else {
+                    qjz += ',' + nodes[i].id;
+                }
+            }
+            }
+            console.log(qjz);
+            var ks = qjz; //开始
+            //var js = $("#js").val(); //结束
+            var js = ""; //结束
+            var nian = $("#nian option:selected").val(); //年
+            var yue = $("#yue option:selected").val(); //月
+            var bhbfzc = $("#bhbfzc option:selected").val(); //包含报废资产
 
             var url = "http://192.168.1.88:8086/handler1.ashx?t=COSTCNTR_DETAIL&I_BUKRS=" + ggdm + "&I_YEAR=" + nian +
                         "&I_MONTH=" + yue + "&OPTION=" + qj + "&LOW=" + ks + "&HIGH=" +
