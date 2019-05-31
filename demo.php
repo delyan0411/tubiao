@@ -42,6 +42,14 @@ $SAP_ID=$ROW2[0];
             width: 80px;
         }
 
+        .layui-table-view .layui-table th {
+            background-color: #f2f2f2;
+        }
+
+        .layui-table-view .layui-table td{
+            background-color: #fff;
+        }
+
         .layui-table-cell,
         .layui-table-tool-panel li {
             overflow: unset;

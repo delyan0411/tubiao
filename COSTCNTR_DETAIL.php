@@ -41,6 +41,14 @@ if ($ROW2 = mysql_fetch_row($cursor2))
     .select-item-first .layui-form-label {
       width: 80px;
     }
+    
+    .layui-table-view .layui-table th {
+        background-color: #f2f2f2;
+    }
+
+    .layui-table-view .layui-table td{
+      background-color: #fff;
+    }
 
     .layui-table-cell,
     .layui-table-tool-panel li {
