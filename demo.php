@@ -275,19 +275,22 @@ $SAP_ID=$ROW2[0];
             var yue = $("#yue option:selected").val(); //月
             var bhbfzc = $("#bhbfzc option:selected").val(); //包含报废资产
 
-            var url = "http://192.168.1.88:8086/handler1.ashx?t=SLTANLA&I_BUKRS=" + ggdm + "&I_YEAR=" + nian +
-                "&I_PERIO=" + yue + "&I_DEAKT=" + bhbfzc + "&OPTION=" + qj + "&LOW=" + ks + "&HIGH=" +
-                js + "";
+            //var url = "http://192.168.1.88:8086/handler1.ashx?t=SLTANLA&I_BUKRS=" + ggdm + "&I_YEAR=" + nian +
+            //   "&I_PERIO=" + yue + "&I_DEAKT=" + bhbfzc + "&OPTION=" + qj + "&LOW=" + ks + "&HIGH=" +
+            //    js + "";
 
+            var url = "http://192.168.1.88:8086/handler1.ashx?t=SLTANLA";
             table.render({
                 elem: '#demo'
                 , width: 1200
                 , height: 600
                 , url: url //数据接口
+                ,method:"post"
+                ,where: {I_BUKRS: ggdm,I_YEAR:nian,I_PERIO:yue,I_DEAKT:bhbfzc,OPTION:qj,LOW:ks,HIGH:js}
                 , title: '用户表'
                 , text: {
     none: '暂无相关数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
-  }
+                }
                 , cols: [[ //表头
                     { field: 'BUKRS', width: 86, title: '公司代码' }
                     , { field: 'ANLN1', width: 125, title: '资产编码' }
