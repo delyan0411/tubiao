@@ -300,7 +300,7 @@ $SAP_ID=$ROW2[0];
                     , { field: 'ZRZRQ', width: 103, title: '入账日期' }
                     , { field: 'STORT', width: 86, title: '保管人' }
                     , { field: 'MENGE', width: 86, title: '数量' }
-                    , { field: 'ZZCYZ', width: 104, title: '资产原值' }
+                    , { field: 'ZQMYZ', width: 104, title: '资产原值' }
                     , { field: 'ZDQZJ', width: 90, title: '当期折旧' }
                     , { field: 'ZQMJZ', width: 104, title: '期末净值' }
 

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>订单</title>
+  <style>
+    .order-table {
+      width: 100%;
+      border-collapse:collapse;
+    }
+    .order-table thead{
+      background-color: lightsteelblue;
+      
+    }
+    .order-table th {
+      text-align: left;
+      white-space: nowrap;
+    }
+    .order-table tbody tr:nth-of-type(odd) {
+      background-color: #f5f5f5;
+    }
+    .order-table td {
+      
+      font-size: 14px;
+    }
+    .state-green {
+      color: green;
+      font-weight: bold;
+    }
+    .state-grey {
+      color: gray;
+    }
+  </style>
+  <script src="http://192.168.1.101:8800/module/DatePicker/WdatePicker.js"></script>
+</head>
+<body>
+  <form  action="http://192.168.1.88:8086/DZ_MD.ashx" method="get">
+    开始时间:<input type="text" id="begin_time" name="begin_time" size="10"  onclick="WdatePicker()">
+    结束时间:<input type="text" id="end_time" name="end_time" size="10"  onclick="WdatePicker()">
+    <input type="button" onclick="cx()" value="查询" />
+    <input type="hidden" name="t" value="expcworder" value="查询" />
+    <input type="submit"  value="导出" />
+  </form>
+  <table class="order-table">
+    <thead>
+      <tr>
+        <th>订单号</th>
+        <th>门店</th>
+        <th>门店编码</th>
+        <th>商品名</th>
+        <th>商品编号</th>
+        <th>数量</th>
+        <th>单价</th>
+        <th>采购金额</th>
+        <th>税额</th>
+        <th>订单生成时间</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+
+  <script type="text/javascript" src="jquery-2.2.4.js"></script>
+  <script>
+    $(function() {
+      
+     
+    })
+function cx()
+{
+ var begin_time= $("#begin_time").val();
+var end_time=  $("#end_time").val();
+  $.ajax({
+        url: 'http://192.168.1.88:8086/DZ_MD.ashx?t=GetDZCWOrder&begin_time='+begin_time+'&end_time='+end_time+'',
+        type: 'get',
+        success: function(res) {
+          var html = '';
+          if(res.code==0){
+          var list = res.list;
+          for(var i = 0; i < list.length; i++) {
+            var item = list[i];
+            html += '<tr>' + 
+            '<td>' + item.orderno + '</td>' +
+            '<td>' + item.storename + '</td>' +
+            '<td>' + item.storesap + '</td>' +
+            '<td>' + item.productname + '</td>' +
+            '<td>' + item.productno + '</td>' +
+            '<td>' + item.qty + '</td>' +
+            '<td>' + item.salesamount + '</td>' +
+            '<td>' + item.costamount + '</td>' + 
+            '<td>' + item.tax + '</td>' +
+            '<td>' + item.pay_time + '</td>' +
+            '</tr>';
+          }
+          $(".order-table tbody").html(html);
+          }
+          else
+          {
+            alert("获取失败")
+          } 
+        }
+      })
+}
+
+  </script>
+</body>
+</html>

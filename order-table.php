@@ -63,7 +63,12 @@ $SAP_ID=$ROW2[0];
         <th>支付时间</th>
         <th>生成时间</th>
         <th>订单状态</th>
-        <th>订单明细</th>
+        <th>订单明细  
+          <form  action="http://192.168.1.88:8086/DZ_MD.ashx" method="get">
+            <input type="hidden" name="t" value="ExpDZOrder"/>
+            <input type="hidden" name="uid" value="<?echo $SAP_ID ?>"/>
+    <input type="submit"  value="导出" />
+  </form></th>
       </tr>
     </thead>
     <tbody>

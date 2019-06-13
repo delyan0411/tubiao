@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>缺货登记</title>
+  <style>
+    .qhdj-table {
+      width: 100%;
+      border-collapse:collapse;
+    }
+    .qhdj-table thead{
+      background-color: lightsteelblue;
+      
+    }
+    .qhdj-table th {
+      padding: 10px 0;
+      white-space: nowrap;
+    }
+    .qhdj-table tbody tr:nth-of-type(odd) {
+      background-color: #f5f5f5;
+    }
+    .qhdj-table td {
+      padding: 10px;
+      font-size: 14px;
+    }
+    .state-green {
+      color: green;
+      font-weight: bold;
+    }
+    .state-grey {
+      color: gray;
+    }
+  </style>
+</head>
+<body>
+  <table class="qhdj-table">
+    <thead>
+      <tr>
+        <th>序列号</th>
+        <th>客户预留手机号</th>
+        <th>缺货描述</th>
+        <th>门店</th>
+        <th>门店登记时间</th>
+        <th style="width: 600px">采购意见<a href="#">导出表单</a></th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+
+  <script type="text/javascript" src="jquery-2.2.4.js"></script>
+  <script>
+    $(function() {
+      $.ajax({
+        url: 'http://192.168.1.88:8086/QHDJ.ashx?t=GETQhdjList',
+        type: 'get',
+        success: function(res) {
+          var html = '';
+          var list = res.data;         
+          for(var i = 0; i < list.length; i++) {
+            var item = list[i];
+            
+            html += '<tr>' + 
+            '<td class="tid">' + item.id + '</td>' +
+            '<td>' + item.mobile_no + '</td>' +
+            '<td>' + item.miaoshu + '</td>' +
+            '<td>' + item.mendian + '</td>' +
+            '<td>' + item.add_time + '</td>' +
+            '<td style="width: 600px"><textarea style="width: 600px;" name="yijian" placeholder="请输入内容" maxlength="800">' +
+            '' + item.sgyijian + '</textarea><button type="button" onClick="updateyijian(this)">确定</button>' + item.sgyjtime + '</td>' +
+            '</tr>';
+          }
+          $(".qhdj-table tbody").html(html);          
+        }
+      })
+    })
+    function updateyijian(obj)
+    {
+      var iddom=$(obj).parent().siblings(".tid");
+      var id= iddom.text();
+      console.log(id);
+      var textareadom=$(obj).siblings("textarea");
+     var yijian= textareadom.val().trim();
+     console.log(yijian);
+      if(id==""||yijian=="")
+      {
+        alert("请填写完整");
+      }
+      else{
+      $.ajax({
+        url: 'http://192.168.1.88:8086/QHDJ.ashx?t=Updateyijian',
+        type: 'post',
+        data:{'arrival_notice_id':id,'yijian':yijian},
+        success: function(res) {
+          alert(res.msg);    
+        }
+      })
+      }
+    }
+  </script>
+</body>
+</html>
