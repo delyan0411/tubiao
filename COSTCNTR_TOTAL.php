@@ -146,6 +146,9 @@ if ($ROW2 = mysql_fetch_row($cursor2))
                 <div class="select-item">
                     <button class="layui-btn search-btn" >查询</button>
                 </div>
+                <div class="select-item" style="margin-left: 10px;">
+                    <input class="layui-btn" value="导出" type="button" onclick="formsubmit()"/>
+                </div>
             </div>
         </div>
         
@@ -183,7 +186,71 @@ var zsurl = "http://192.168.1.88:8086/";
 
     };
 
+    function formsubmit(){
+        var qjz = '';
+            var data=[];           
+            var cbzx=$.fn.zTree.getZTreeObj("dept");
+            if(cbzx){
+             var nodes=cbzx.getCheckedNodes(true);             
+             var v="";             
+            for(var i=0;i<nodes.length;i++){
+              var item={};
+            v+=nodes[i].name + ",";
+            //console.log("节点id:"+nodes[i].id+";;;节点名称"+nodes[i].name+";;;;父节点:"+nodes[i].pid+";;;;shibushifu节点:"+nodes[i].isParent+"");
+                 if (i == 0) {
+                    qjz = nodes[i].id;
+                } else {
+                    qjz += ',' + nodes[i].id;
+                }
+            }
+            }
+        var form = $('<form></form>');
+    // 设置属性 I_BUKRS: ggdm,I_YEAR:nian,I_MONTH:yue,OPTION:qj,LOW:ks,HIGH:js
+    var newUrl = 'http://192.168.1.88:8086/handler1.ashx?t=COSTCNTR_TOTALEXP';
+    form.attr('action', newUrl);
+    form.attr('method', 'post');
+//I_BUKRS: ggdm,I_YEAR:nian,I_PERIO:yue,I_DEAKT:bhbfzc,OPTION:qj,LOW:ks,HIGH:js
+    // 创建Input
+    var I_BUKRS_input = $('<input  name="I_BUKRS" type="hidden" />');
+    I_BUKRS_input.attr('value',  1000);
+    // 附加到Form
+    form.append(I_BUKRS_input);
 
+     // 创建Input
+     var I_YEAR_input = $('<input  name="I_YEAR" type="hidden" />');
+     I_YEAR_input.attr('value', $("#nian option:selected").val());
+    // 附加到Form
+    form.append(I_YEAR_input);
+
+     // 创建Input
+     var I_PERIO_input = $('<input  name="I_MONTH" type="hidden" />');
+     I_PERIO_input.attr('value', $("#yue option:selected").val() );
+    // 附加到Form
+    form.append(I_PERIO_input);
+
+     // 创建Input
+     var OPTION_input = $('<input  name="OPTION" type="hidden" />');
+     OPTION_input.attr('value',  'EQ');
+    // 附加到Form
+    form.append(OPTION_input);
+
+    // 创建Input
+    var LOW_input = $('<input  name="LOW" type="hidden" />');
+    LOW_input.attr('value',  qjz);
+    // 附加到Form
+    form.append(LOW_input);
+
+    // 创建Input
+    var HIGH_input = $('<input  name="HIGH" type="hidden" />');
+    HIGH_input.attr('value',  '');
+    // 附加到Form
+    form.append(HIGH_input);
+
+    $(document.body).append(form);
+    console.log(form.html())
+    // 提交表单
+    form.submit();
+    }
 
     $(document).ready(function() {
 
