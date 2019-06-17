@@ -1,7 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>导入费用报销收款明细</title>
+    </head>
+    <body>
+<h1>导入费用报销收款明细</h1>
 <form id="wu-form-stuInfo" ACTION="http://localhost:22674/ImportExcelHandler.ashx" METHOD="POST"  enctype="multipart/form-data">
     <!-- 31939 173 -->
-    <input type="text" name="flowid" />
-    <input type="text" name="runid" />
+    <input type="hidden" name="flowid" id="flowid" />
+    <input type="hidden" name="runid" id="runid" />
     <input type="file" id="xlsimport" name="xlsimport"  />
-    <input type="submit" name="mySent" value="发送" />
+    <input name="mySent" value="导入"  type="button" onclick="formsubmit()" />
 </form>
+<a href="费用报销收款明细模板.xls">下载模板</a>
+<script type="text/javascript" src="jquery-2.2.4.js"></script>
+<script>
+
+function request(paras){ 
+        var url = location.href; 
+        var paraString = url.substring(url.indexOf("?")+1,url.length).split("&"); 
+        var paraObj = {} 
+        for (i=0; j=paraString[i]; i++){ 
+        	paraObj[j.substring(0,j.indexOf("=")).toLowerCase()] = j.substring(j.indexOf("=")+1,j.length); 
+        } 
+        var returnValue = paraObj[paras.toLowerCase()]; 
+        if(typeof(returnValue)=="undefined"){ 
+        	return ""; 
+        }else{ 
+        	return returnValue; 
+        } 
+}
+function formsubmit(){
+    var flowid=$('#flowid').val();
+    var runid=$('#runid').val();
+    var file = $('#xlsimport').val();
+    if(!file){
+        alert("请选择导入文件");
+        return false;
+    }
+    if(flowid!=""&&runid!=""){
+    var form = $('#wu-form-stuInfo');
+       // 提交表单
+       form.submit();
+    }
+    else{
+        alert("参数不正确");
+        return false;
+    }
+}
+$(document).ready(function() {
+    var flowid=request('flowid');
+    $('#flowid').val(flowid);
+    var runid=request('runid');
+    $('#runid').val(runid);
+    console.log($('#flowid').val());
+    console.log($('#runid').val());
+  });
+</script>
+</body>
+</html>
