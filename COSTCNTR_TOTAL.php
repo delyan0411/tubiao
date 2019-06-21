@@ -145,6 +145,7 @@ if ($ROW2 = mysql_fetch_row($cursor2))
                 </div>-->
                 <div class="select-item">
                     <button class="layui-btn search-btn" >查询</button>
+                    <input type="hidden" value="" id="test"/>
                 </div>
                 <div class="select-item" style="margin-left: 10px;">
                     <input class="layui-btn" value="导出" type="button" onclick="formsubmit()"/>
@@ -221,6 +222,11 @@ var zsurl = "http://192.168.1.88:8086/";
      I_YEAR_input.attr('value', $("#nian option:selected").val());
     // 附加到Form
     form.append(I_YEAR_input);
+
+      // 创建Input
+  var test_input = $('<input  name="test" type="hidden" />');
+  test_input.attr('value', $("#test").val());
+     form.append(test_input);
 
      // 创建Input
      var I_PERIO_input = $('<input  name="I_MONTH" type="hidden" />');
@@ -311,8 +317,9 @@ layui.use(['table'], function() {
             var nian = $("#nian option:selected").val(); //年
             var yue = $("#yue option:selected").val(); //月
             var bhbfzc = $("#bhbfzc option:selected").val(); //包含报废资产
+            var test= $("#test").val();
             //&I_BUKRS=" + ggdm + "&I_YEAR=" + nian +"&I_MONTH=" + yue + "&OPTION=" + qj + "&LOW=" + ks + "&HIGH=" +js + ""
-            var url = "http://192.168.1.88:8086/handler1.ashx?t=COSTCNTR_TOTAL";
+            var url = "http://192.168.1.88:8086/handler1.ashx?t=COSTCNTR_TOTAL&test="+test+"";
 
             table.render({
                 elem: '#demo'

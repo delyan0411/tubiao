@@ -17,7 +17,7 @@
     }
     .box {
       margin: 10px;
-      width: 300px;
+      width: 600px;
       height: 500px;
       border: 1px solid #aaa;
       float: left;
@@ -86,11 +86,18 @@
       <div class="result-list"></div>
       <div class="tjan">
         <input onclick="tijiao()" type="button" value="提交"/></div>
+        <input type="hidden" value="" id="test"/>
       </div>
   </div>
   
-  <div class="box">
+  <div class="box" >
     <ul id="cbzx" class="ztree"></ul>
+  </div>
+
+  <div class="new" style="clear: both">
+    <span>新加入的成本中心</span>
+    <ul id="newul"></ul>
+
   </div>
   <!-- <ul id="cbzx2" class="eleTree" lay-filter="data14"></ul> -->
   <!-- <script src="./jquery-2.2.4.js" >
@@ -130,9 +137,9 @@
 
     
 		$(document).ready(function(){
-     
+      var test= $("#test").val();
       $.ajax({
-        url: url+"Dept_Cbzx.ashx?t=GETDeptList",
+        url: url+"Dept_Cbzx.ashx?t=GETDeptList&test="+test+"",
         type: 'post',
         success: function (data) {
           var zNodes=data;
@@ -140,7 +147,7 @@
         }
     })
     $.ajax({
-      url: url+"Dept_Cbzx.ashx?t=GETCbzxList",
+      url: url+"Dept_Cbzx.ashx?t=GETCbzxList&test="+test+"",
         type: 'post',
         success: function (data) {
           var zNodes=data;
@@ -149,12 +156,26 @@
       //cbzxnodes = cbzxTree.getNodes();
         }
     })
+
+    $.ajax({
+        url: url+"Dept_Cbzx.ashx?t=GETNewCbzx&test="+test+"",
+        type: 'post',
+        success: function (data) {
+          var newdata=data.data;
+          $("#newul").html('');
+          $.each(newdata,function(index,value){
+     console.log(value.KTEXT+value.KOSTL+value.INTIME);
+     $("#newul").append("<li>"+value.KTEXT+"|"+value.KOSTL+"|"+value.INTIME+"<li>");
+});
+        }
+    })
   });
 		function ondeptClick(event, treeId, treeNode, clickFlag){
               $("#bmname").text(treeNode.name + "可查看的成本中心");
               $("#bmvalue").val(treeNode.sapid);
+              var test= $("#test").val();
               $.ajax({
-        url: url+"Dept_Cbzx.ashx?t=GETCbzxDeptList",
+        url: url+"Dept_Cbzx.ashx?t=GETCbzxDeptList&test="+test+"",
         type: 'post',
         data: {sap_dept_id:treeNode.sapid},
         success: function (data) {
@@ -166,7 +187,7 @@
        {
         console.log(data.data);
         // var str =   data.CBZX_ID_STR;
-var arr=data.data; 
+        var arr=data.data; 
         var ulhtml="";        
         var arrids=[];
        
@@ -231,12 +252,15 @@ function tijiao()
               return false;
             }
   console.log(JSON.stringify(data));
+  var test= $("#test").val();
     $.ajax({
-          url: url+"Dept_Cbzx.ashx?t=UpdateCbzxDeptList",
+          url: url+"Dept_Cbzx.ashx?t=UpdateCbzxDeptList&test="+test+"",
           type: 'post',
           data: {DATA:JSON.stringify(data),SAP_DEPT_ID:deptid},
           success: function (data) {
+            console.log(data);
             alert("更新成功");
+            console.log('完成');
           }
     })
 }

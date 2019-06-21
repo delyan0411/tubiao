@@ -144,6 +144,7 @@ $SAP_ID=$ROW2[0];
                 </div>
                 <div class="select-item">
                     <button class="layui-btn search-btn">查询</button>
+                    <input type="hidden" value="" id="test"/>
                 </div>
                 <div class="select-item" style="margin-left: 10px;">
                     <input class="layui-btn" value="导出" type="button" onclick="formsubmit()"/>
@@ -213,6 +214,11 @@ $SAP_ID=$ROW2[0];
     I_BUKRS_input.attr('value',  1000);
     // 附加到Form
     form.append(I_BUKRS_input);
+    
+  // 创建Input
+  var test_input = $('<input  name="test" type="hidden" />');
+  test_input.attr('value', $("#test").val());
+     form.append(test_input);
 
      // 创建Input
      var I_YEAR_input = $('<input  name="I_YEAR" type="hidden" />');
@@ -350,8 +356,8 @@ $SAP_ID=$ROW2[0];
             //var url = "http://192.168.1.88:8086/handler1.ashx?t=SLTANLA&I_BUKRS=" + ggdm + "&I_YEAR=" + nian +
             //   "&I_PERIO=" + yue + "&I_DEAKT=" + bhbfzc + "&OPTION=" + qj + "&LOW=" + ks + "&HIGH=" +
             //    js + "";
-
-            var url = "http://192.168.1.88:8086/handler1.ashx?t=SLTANLA";
+            var test= $("#test").val();
+            var url = "http://192.168.1.88:8086/handler1.ashx?t=SLTANLA&test="+test+"";
             table.render({
                 elem: '#demo'
                 , width: 1200

@@ -8,7 +8,7 @@
 <h1>导入费用报销收款明细</h1>
 <form id="wu-form-stuInfo" ACTION="http://localhost:22674/ImportExcelHandler.ashx" METHOD="POST"  enctype="multipart/form-data">
     <!-- 31939 173 -->
-    <input type="hidden" name="flowid" id="flowid" />
+    <!-- <input type="hidden" name="flowid" id="flowid" /> -->
     <input type="hidden" name="runid" id="runid" />
     <input type="file" id="xlsimport" name="xlsimport"  />
     <input name="mySent" value="导入"  type="button" onclick="formsubmit()" />
@@ -32,14 +32,14 @@ function request(paras){
         } 
 }
 function formsubmit(){
-    var flowid=$('#flowid').val();
+    //var flowid=$('#flowid').val();
     var runid=$('#runid').val();
     var file = $('#xlsimport').val();
     if(!file){
         alert("请选择导入文件");
         return false;
     }
-    if(flowid!=""&&runid!=""){
+    if(runid!=""){
     var form = $('#wu-form-stuInfo');
        // 提交表单
        form.submit();
@@ -50,8 +50,8 @@ function formsubmit(){
     }
 }
 $(document).ready(function() {
-    var flowid=request('flowid');
-    $('#flowid').val(flowid);
+    // var flowid=request('flowid');
+    // $('#flowid').val(flowid);
     var runid=request('runid');
     $('#runid').val(runid);
     console.log($('#flowid').val());
