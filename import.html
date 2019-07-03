@@ -6,10 +6,13 @@
     </head>
     <body>
 <h1>导入费用报销收款明细</h1>
-<form id="wu-form-stuInfo" ACTION="http://localhost:22674/ImportExcelHandler.ashx" METHOD="POST"  enctype="multipart/form-data">
+
+//http://localhost:22674 192.168.1.88:8086
+<form id="wu-form-stuInfo" ACTION="http://192.168.1.88:8086/ImportExcelHandler.ashx" METHOD="POST"  enctype="multipart/form-data">
     <!-- 31939 173 -->
     <!-- <input type="hidden" name="flowid" id="flowid" /> -->
     <input type="hidden" name="runid" id="runid" />
+    <input type="hidden" name="gsdm" id="gsdm" />
     <input type="file" id="xlsimport" name="xlsimport"  />
     <input name="mySent" value="导入"  type="button" onclick="formsubmit()" />
 </form>
@@ -34,6 +37,7 @@ function request(paras){
 function formsubmit(){
     //var flowid=$('#flowid').val();
     var runid=$('#runid').val();
+    var gsdm=$('#gsdm').val();
     var file = $('#xlsimport').val();
     if(!file){
         alert("请选择导入文件");
@@ -53,7 +57,9 @@ $(document).ready(function() {
     // var flowid=request('flowid');
     // $('#flowid').val(flowid);
     var runid=request('runid');
+    var gsdm=request('gsdm');
     $('#runid').val(runid);
+    $('#gsdm').val(gsdm);
     console.log($('#flowid').val());
     console.log($('#runid').val());
   });
