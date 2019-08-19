@@ -263,7 +263,7 @@ $SAP_ID=$ROW2[0];
     }
 
 		$(document).ready(function(){
-     
+            getDateNow();
       $.ajax({
         url: url+"Dept_Cbzx.ashx?t=GetUserCbzx&uid=<?echo $SAP_ID ?>&deptid=<?echo $SAP_DEPT_ID ?> ",
         type: 'post',
@@ -314,6 +314,16 @@ $SAP_ID=$ROW2[0];
                 search(layui.table);
             })
         })
+
+
+        function getDateNow() {
+            var now = new Date();
+            var year = now.getFullYear();
+            var month = now.getMonth() + 1;
+            $('#nian').val(year);
+            $('#yue').val(month);
+        }
+
         function search(table) {
             //var ggdm = $("#ggdm").val(); //公司代码
             var ggdm = "1000"; //公司代码

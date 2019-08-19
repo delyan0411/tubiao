@@ -258,6 +258,8 @@ var zsurl = "http://192.168.1.88:8086/";
     form.submit();
     }
 
+    
+
     $(document).ready(function() {
       $.ajax({
         url: url + "Dept_Cbzx.ashx?t=GetUserCbzx&uid=<? echo $SAP_ID ?> &deptid=<? echo $SAP_DEPT_ID ?> ",
