@@ -65,6 +65,22 @@ $SAP_ID=$ROW2[0];
           overflow: auto;
           border: 1px solid #aaa;
         }
+        .search-name,
+        .search-no {
+            float: left;
+          padding-left: 80px;
+          overflow: hidden;
+        }
+        .search-name input,
+        .search-no input {
+          width: 300px;
+          height: 34px;
+          padding: 0 5px;
+          float: left;
+        }
+        .search-box {
+            overflow: hidden;
+        }
     </style>
 </head>
 
@@ -72,35 +88,12 @@ $SAP_ID=$ROW2[0];
 
     <div class="layui-container container">
         <div class="layui-form">
-            <!-- <div class="layui-form-item">
-                <label class="layui-form-label">公司代码</label>
-                <div class="layui-input-block">
-                    <input type="text" id="ggdm" name="title" required lay-verify="required" placeholder="请输入标题"
-                        autocomplete="off" class="layui-input" value="1000">
-                </div>
-            </div> -->
             <div class="tree-box">
                 <ul id="dept" class="ztree"  style="float: left;"></ul>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label" style="width: 100%;text-align: center;font-size:22px;">九洲集团固定资产清单</label>
                 <div class="cbzxlist" style="display:inline;"></div>
-                <!-- <div class="layui-inline">
-                    <select name="city" lay-verify="required" id="qj">
-                        <option value="BT">区间</option>
-                        <option value="EQ">单个(多个不连续的,)</option>
-                    </select>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">范围</label>
-                    <div class="layui-input-inline" style="width: 100px;">
-                        <input type="text" id="ks" value="1000100000" name="price_min" placeholder="请输入id" autocomplete="off" class="layui-input">
-                    </div>
-                    <div class="layui-form-mid">-</div>
-                    <div class="layui-input-inline" style="width: 100px;">
-                        <input type="text" id="js" value="1000299999" name="price_max" placeholder="请输入id" autocomplete="off" class="layui-input">
-                    </div>
-                </div> -->
             </div>
             <div class="layui-form-item select-list">
                 <div class="select-item select-item-first">
@@ -150,13 +143,20 @@ $SAP_ID=$ROW2[0];
                     <input class="layui-btn" value="导出" type="button" onclick="formsubmit()"/>
                 </div>
             </div>
+            <div class="search-box">
+                <div class="search-no">
+                    <input type="text" id="no-input" placeholder="请输入资产编码">
+                    <button class="layui-btn search-no-btn">搜索</button>
+                </div>
+                <div class="search-name">
+                    <input type="text" id="desc-input" placeholder="请输入资产描述">
+                    <button class="layui-btn search-name-btn">搜索</button>
+                </div>
+            </div>
         </div>
 
-
         <table class="layui-hide" id="demo" lay-filter="test"></table>
-
     </div>
-
     <script src="./layui/layui.all.js" charset="gb2312" ></script>
     <link rel="stylesheet" href="ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
 	<script type="text/javascript" src="jquery-2.2.4.js"></script>
@@ -195,7 +195,6 @@ $SAP_ID=$ROW2[0];
             for(var i=0;i<nodes.length;i++){
               var item={};
             v+=nodes[i].name + ",";
-            //console.log("节点id:"+nodes[i].id+";;;节点名称"+nodes[i].name+";;;;父节点:"+nodes[i].pid+";;;;shibushifu节点:"+nodes[i].isParent+"");
                  if (i == 0) {
                     qjz = nodes[i].id;
                 } else {
@@ -262,69 +261,51 @@ $SAP_ID=$ROW2[0];
     form.submit();
     }
 
-		$(document).ready(function(){
-            getDateNow();
-      $.ajax({
-        url: url+"Dept_Cbzx.ashx?t=GetUserCbzx&uid=<?echo $SAP_ID ?>&deptid=<?echo $SAP_DEPT_ID ?> ",
-        type: 'post',
-        success: function (data) {
-          var zNodes=data;
-            $.fn.zTree.init($("#dept"), settingcbzx, zNodes);
-            var treeObj=$.fn.zTree.getZTreeObj("dept");
-            treeObj.checkAllNodes(true);
-        }
-    })
-});
+    $(document).ready(function(){
+        getDateNow();
+        layui.use('form',function(){
+          layui.form.render('select');
+        });
+        $.ajax({
+            url: url+"Dept_Cbzx.ashx?t=GetUserCbzx&uid=<?echo $SAP_ID ?>&deptid=<?echo $SAP_DEPT_ID ?> ",
+            type: 'post',
+            success: function (data) {
+            var zNodes=data;
+                $.fn.zTree.init($("#dept"), settingcbzx, zNodes);
+                var treeObj=$.fn.zTree.getZTreeObj("dept");
+                treeObj.checkAllNodes(true);
+            }
+        })
+    });
         layui.use(['table'], function () {
             table = layui.table
             search(layui.table);
 
-
-            // $.ajax({
-            //     url: "http://192.168.1.88:8086/Dept_Cbzx.ashx?t=GETCbzxDeptList",
-            //     type: 'post',
-            //     data: { sap_dept_id: <?echo $SAP_DEPT_ID ?> },
-            //     success: function (data) {
-            //         //$(".cbzxlist").html("");
-            //         if (data.code == 0) {
-            //             if (data.CBZX_ID_STR) {
-            //                 var str = data.CBZX_ID_STR;
-            //                 var arr = str.split(",");
-            //                 var checkhtml = "";
-            //                 var arrids = [];
-            //                 $.each(arr, function (index, data) {
-            //                     var arr2 = data.split("|");
-            //                     //ulhtml+="<li class=\"inp\">"+arr2[0]+"</li>";             
-            //                     checkhtml += "<input type=\"checkbox\" name=\"cbzx\" title=\"" + arr2[0] + "\" lay-skin=\"primary\" value=\"" + arr2[1] + "\" />";
-            //                     //console.log(checkhtml);    
-            //                 });
-            //                 $(".cbzxlist").html(checkhtml);
-            //                 //最后重新加载一下就可以了
-            //                 layui.use('form', function () {
-            //                     var form = layui.form;
-            //                     //根据的type类型修改
-            //                     form.render('checkbox');
-            //                 });
-            //             }
-            //         }
-            //     }
-            // })
-
             $(".search-btn").on("click", function () {
                 search(layui.table);
             })
+            $(".search-name-btn").on("click", function() {
+              var name = $("#desc-input").val().trim();
+              search(layui.table, 'desc', name);
+            })
+            $(".search-no-btn").on("click", function() {
+              var name = $("#no-input").val().trim();
+              search(layui.table, 'no', name);
+            })
         })
-
 
         function getDateNow() {
             var now = new Date();
-            var year = now.getFullYear();
-            var month = now.getMonth() + 1;
+            var year = now.getFullYear() + '';
+            var month = (now.getMonth() + 1) + '';
+            if (month < 10) {
+              month = '0' + month;
+            }
             $('#nian').val(year);
             $('#yue').val(month);
         }
 
-        function search(table) {
+        function search(table, type, descTxt) {
             //var ggdm = $("#ggdm").val(); //公司代码
             var ggdm = "1000"; //公司代码
             //var qj = $("#qj option:selected").val(); //区间
@@ -341,7 +322,7 @@ $SAP_ID=$ROW2[0];
               var item={};
             v+=nodes[i].name + ",";
             //console.log(nodes[i].id); //获取选中节点的值
-            console.log("节点id:"+nodes[i].id+";;;节点名称"+nodes[i].name+";;;;父节点:"+nodes[i].pid+";;;;shibushifu节点:"+nodes[i].isParent+"");
+            // console.log("节点id:"+nodes[i].id+";;;节点名称"+nodes[i].name+";;;;父节点:"+nodes[i].pid+";;;;shibushifu节点:"+nodes[i].isParent+"");
             // item.id=nodes[i].id;
             // item.name=nodes[i].name;
             // item.pid=nodes[i].pid;
@@ -379,6 +360,25 @@ $SAP_ID=$ROW2[0];
                 , text: {
     none: '暂无相关数据' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
                 }
+                ,parseData: function(res) {
+                  var result;
+                  if (res.data.length > 0) {
+                    result = res.data.filter(function(item){
+                        if (type === 'desc') {
+                            return item.TXT50.indexOf(descTxt) != -1;
+                        } else if (type === 'no') {
+                            return item.ANLN1.indexOf(descTxt) != -1;
+                        } else {
+                            return item;
+                        }
+                    })
+                  }
+                  return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "data": result //解析数据列表
+                  };
+                }
                 , cols: [[ //表头
                     { field: 'BUKRS', width: 86, title: '公司代码' }
                     , { field: 'ANLN1', width: 125, title: '资产编码' }
@@ -387,7 +387,7 @@ $SAP_ID=$ROW2[0];
                     , { field: 'KTEXT', width: 185, title: '成本中心描述' }
                     , { field: 'ZRZRQ', width: 103, title: '入账日期' }
                     , { field: 'STORT', width: 86, title: '保管人' }
-                    , { field: 'MENGE', width: 86, title: '数量' }
+                    // , { field: 'MENGE', width: 86, title: '数量' }
                     , { field: 'ZQMYZ', width: 104, title: '资产原值' }
                     , { field: 'ZDQZJ', width: 90, title: '当期折旧' }
                     , { field: 'ZQMJZ', width: 104, title: '期末净值' }
